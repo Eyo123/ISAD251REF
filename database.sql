@@ -21,8 +21,8 @@ CREATE TABLE FlightPlan
 CREATE TABLE Journey
 (
 	JourneyId INT AUTO_INCREMENT NOT NULL,
-	JourneyStartDate DATETIME NOT NULL,
-	JourneyEndDate DATETIME NOT NULL,
+	JourneyStartDate DATE NOT NULL,
+	JourneyEndDate DATE NOT NULL,
 	JourneyAvailableSeats INT NOT NULL,
 	FlightPlanID INT NOT NULL,
 	CONSTRAINT fk_Journey_FlightPlanID FOREIGN KEY (FlightPlanID) REFERENCES FlightPlan(FlightPlanID),
@@ -62,3 +62,46 @@ END;
 
 DELIMITER ;
 
+-- procedure takes email and returns hashed password and customerId, if no matching email returns customerId = 0
+DELIMITER //
+
+CREATE PROCEDURE pr_customerLogin (p_email VARCHAR(50),OUT p_hashedPassword VARCHAR(100),OUT p_customerId INT)
+BEGIN
+	SELECT customerId INTO p_customerId FROM Customer WHERE customerEmail = p_email;
+	SELECT CustomerPassword INTO p_hashedPassword FROM Customer WHERE customerEmail = p_email;
+	IF NOT EXISTS (SELECT customerId FROM Customer WHERE customerEmail = p_email)
+	THEN
+		SET p_customerId = 0;
+	END IF;
+END;
+
+//
+
+DELIMITER ;
+
+-- procedure takes email, firstName, lastName, hashedPassword; return results = 'registered' or 'already registered'
+DELIMITER //
+
+CREATE PROCEDURE pr_registerCustomer(p_email VARCHAR(50),p_firstName VARCHAR(20),p_lastName VARCHAR(20),p_hashedPassword VARCHAR(100),p_address VARCHAR(100),p_postcode VARCHAR(10),OUT p_results VARCHAR(20))
+BEGIN
+	IF EXISTS (SELECT CustomerEmail FROM Customer WHERE CustomerEmail = p_email)
+	THEN
+		SET p_results = 'already registered';
+	ELSE
+		INSERT INTO Customer(CustomerEmail,CustomerFirstName,CustomerLastName,CustomerPassword,CustomerAddress,CustomerPostcode)
+		VALUES(p_email,p_firstName,p_lastName,p_hashedPassword,p_address,p_postcode);
+		SET p_results = 'registered';
+	END IF;
+END;
+
+//
+
+DELIMITER ;
+
+-- view all available flights
+CREATE VIEW vw_availableFlights AS
+SELECT FlightPlanOrigin,FlightPlanDestination,JourneyStartDate,JourneyEndDate,JourneyAvailableSeats
+FROM FlightPlan,Journey
+WHERE FlightPlan.FlightPlanID = Journey.FlightPlanID
+AND JourneyAvailableSeats > 0
+AND JourneyStartDate >= CURRENT_DATE()
