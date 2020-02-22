@@ -40,7 +40,7 @@ class Database
         $connection = $this->getConnection();
 
         # call customer login procedure
-        $sql = "CALL pr_BookFlight (:customerID,:journeyID,@bookingID)";
+        $sql = "CALL pr_bookFlight (:customerID,:journeyID,@bookingID)";
         $statement = $connection->prepare($sql);
         $statement->bindValue(':customerId',$orderId);
 		$statement->bindValue(':journeyId',$orderId);

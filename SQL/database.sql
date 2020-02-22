@@ -5,7 +5,8 @@ CREATE TABLE Customer
 	CustomerLastName VARCHAR(20) NOT NULL,
 	CustomerEmail VARCHAR(50) UNIQUE NOT NULL,
 	CustomerPassword VARCHAR(255) NOT NULL,
-	CustomerAddress VARCHAR(100) NOT NULL,
+	CustomerAddress1 VARCHAR(100) NOT NULL,
+	CustomerAddress2 VARCHAR(100) NOT NULL,
 	CustomerPostcode VARCHAR(10) NOT NULL,
 	CONSTRAINT pk_Customer PRIMARY KEY (CustomerId)
 );
@@ -21,9 +22,11 @@ CREATE TABLE FlightPlan
 CREATE TABLE Journey
 (
 	JourneyId INT AUTO_INCREMENT NOT NULL,
-	JourneyStartDate DATE NOT NULL,
-	JourneyEndDate DATE NOT NULL,
+	JourneyDate DATE NOT NULL,
+	JourneyDepartureTime VARCHAR(20) NOT NULL,
+	JourneyArrivalTime VARCHAR(20) NOT NULL,
 	JourneyAvailableSeats INT NOT NULL,
+	JourneyPrice DECIMAL(6,2) NOT NULL,
 	FlightPlanID INT NOT NULL,
 	CONSTRAINT fk_Journey_FlightPlanID FOREIGN KEY (FlightPlanID) REFERENCES FlightPlan(FlightPlanID),
 	CONSTRAINT pk_Journey PRIMARY KEY (JourneyId)
@@ -32,7 +35,7 @@ CREATE TABLE Journey
 CREATE TABLE Booking
 (
 	BookingID INT AUTO_INCREMENT NOT NULL,
-	BookingPaid CHAR(1) NOT NULL DEFAULT 'n' CHECK (BookingPaid IN('y','n')),
+	BookingStatus VARCHAR(10) NOT NULL DEFAULT 'booked' CHECK (BookingStatus IN('booked','cancelled','confirmed')),
 	JourneyID INT NOT NULL,
 	CustomerID INT NOT NULL,
 	CONSTRAINT fk_Booking_JourneyID FOREIGN KEY (JourneyID) REFERENCES Journey(JourneyID),
@@ -44,14 +47,14 @@ CREATE TABLE Booking
 
 DELIMITER //
 
-CREATE PROCEDURE pr_BookFlight(p_customerID INT, p_journeyID INT, OUT p_bookingID INT)
+CREATE PROCEDURE pr_bookFlight(p_customerID INT, p_journeyID INT, OUT p_bookingID INT)
 BEGIN
 	DECLARE v_journeyAvailableSeats INT;
 	SELECT JourneyAvailableSeats INTO v_journeyAvailableSeats FROM Journey WHERE JourneyID = p_journeyID;
 	IF v_journeyAvailableSeats > 0
 	THEN
 		INSERT INTO Booking(CustomerID,JourneyID)
-		VALUES(p_customerID, p_journeyID)
+		VALUES(p_customerID, p_journeyID);
 		SET p_bookingID = @@IDENTITY;
 	ELSE
 		SET p_bookingID = 0;
@@ -100,7 +103,7 @@ DELIMITER ;
 
 -- view all available flights
 CREATE VIEW vw_availableFlights AS
-SELECT FlightPlanOrigin,FlightPlanDestination,JourneyStartDate,JourneyEndDate,JourneyAvailableSeats
+SELECT FlightPlanOrigin,FlightPlanDestination,JourneyDate,JourneyDepartureTime,JourneyArrivalTime,JourneyAvailableSeats
 FROM FlightPlan,Journey
 WHERE FlightPlan.FlightPlanID = Journey.FlightPlanID
 AND JourneyAvailableSeats > 0
