@@ -121,6 +121,10 @@ DELIMITER //
 
 CREATE PROCEDURE pr_searchFlights(p_origin VARCHAR(20),p_destination VARCHAR(20),p_date DATE)
 BEGIN
+	IF p_date < CURRENT_DATE()
+	THEN
+		SET p_date = CURRENT_DATE();
+	END IF;
 	SELECT FlightPlanCode, FlightPlanOrigin, FlightPlanDestination, JourneyDate, JourneyID
 	FROM FlightPlan, Journey
 	WHERE FlightPlan.FlightPlanID = Journey.FlightPlanID
@@ -157,7 +161,9 @@ BEGIN
 	WHERE FlightPlan.FlightPlanID = Journey.FlightPlanID
 	AND Journey.JourneyID = Booking.JourneyID
 	AND Booking.CustomerID = p_customerID
+	AND JourneyDate >= CURRENT_DATE()
 	AND Booking.BookingStatus = 'booked';
 END;
 
 //
+

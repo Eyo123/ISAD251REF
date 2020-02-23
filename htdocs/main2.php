@@ -8,6 +8,7 @@ require_once('database_classes/database.php');
 ?>
 
 <body>
+
     <form action="search_results.php" method="post">
     <div class="booking-form-box">
 

@@ -81,7 +81,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
             </div>
             <div class="form-group">
                 <label for="date">Date:</label>
-                <input type="text" name="date" class="form-control" id="date" size="50"
+                <input type="date" name="date" class="form-control" id="date" size="50"
                        value="<?php if (isset($_POST['date'])) echo $_POST['date']; ?>" required>
             </div>
             <div class="form-group">

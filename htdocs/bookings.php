@@ -1,6 +1,6 @@
 <?php
 
-$page_title = "Orders";
+$page_title = "Bookings";
 
 include_once('includes/header.html');
 require_once('database_classes/database.php');
@@ -17,7 +17,7 @@ if (!isset($_SESSION['customerId']))
 <section role="contentinfo" aria-label="Flightcrew bookings page">
 <div class="container">
     <div class="row">
-        <h2 class="bg-dark text-white">Orders</h2>
+        <h2 class="bg-dark text-white">Bookings</h2>
     </div>
 	<div class="row">
         <?php
