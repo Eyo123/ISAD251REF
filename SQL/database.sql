@@ -37,7 +37,8 @@ CREATE TABLE Journey
 );
 
 INSERT INTO Journey(JourneyDate,JourneyDepartureTime,JourneyArrivalTime,JourneyAvailableSeats,JourneyPrice,FlightPlanID)
-VALUES('2020-01-12','11:00','12:00',100,200.00,1),('2020-01-14','10:00','13:00',50,300.00,2);
+VALUES('2020-01-12','11:00','12:00',100,200.00,1),('2020-01-14','10:00','13:00',50,300.00,2),
+('2020-05-10','8:00','9:00',100,150.00,1),('2020-07-04','14:00','17:00',50,400.00,2);
 
 CREATE TABLE Booking
 (
