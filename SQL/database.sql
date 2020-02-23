@@ -14,10 +14,14 @@ CREATE TABLE Customer
 CREATE TABLE FlightPlan
 (
 	FlightPlanID INT AUTO_INCREMENT UNIQUE NOT NULL,
+	FlightPlanCode VARCHAR(10) NOT NULL,
 	FlightPlanOrigin VARCHAR(20) NOT NULL,
 	FlightPlanDestination VARCHAR(20) NOT NULL,
 	CONSTRAINT pk_FlightPlan PRIMARY KEY (FlightPlanID)
 );
+
+INSERT INTO FlightPlan(FlightPlanCode,FlightPlanOrigin,FlightPlanDestination)
+VALUES('LN123','London','New York'),('ES456','Egypt','Switzerland');
 
 CREATE TABLE Journey
 (
@@ -31,6 +35,9 @@ CREATE TABLE Journey
 	CONSTRAINT fk_Journey_FlightPlanID FOREIGN KEY (FlightPlanID) REFERENCES FlightPlan(FlightPlanID),
 	CONSTRAINT pk_Journey PRIMARY KEY (JourneyId)
 );
+
+INSERT INTO Journey(JourneyDate,JourneyDepartureTime,JourneyArrivalTime,JourneyAvailableSeats,JourneyPrice,FlightPlanID)
+VALUES('2020-01-12','11:00','12:00',100,200.00,1),('2020-01-14','10:00','13:00',50,300.00,2);
 
 CREATE TABLE Booking
 (
@@ -85,14 +92,14 @@ DELIMITER ;
 -- procedure takes email, firstName, lastName, hashedPassword; return results = 'registered' or 'already registered'
 DELIMITER //
 
-CREATE PROCEDURE pr_registerCustomer(p_email VARCHAR(50),p_firstName VARCHAR(20),p_lastName VARCHAR(20),p_hashedPassword VARCHAR(100),p_address VARCHAR(100),p_postcode VARCHAR(10),OUT p_results VARCHAR(20))
+CREATE PROCEDURE pr_registerCustomer(p_email VARCHAR(50),p_firstName VARCHAR(20),p_lastName VARCHAR(20),p_hashedPassword VARCHAR(100),p_address1 VARCHAR(100),p_address2 VARCHAR(100),p_postcode VARCHAR(10),OUT p_results VARCHAR(20))
 BEGIN
 	IF EXISTS (SELECT CustomerEmail FROM Customer WHERE CustomerEmail = p_email)
 	THEN
 		SET p_results = 'already registered';
 	ELSE
-		INSERT INTO Customer(CustomerEmail,CustomerFirstName,CustomerLastName,CustomerPassword,CustomerAddress,CustomerPostcode)
-		VALUES(p_email,p_firstName,p_lastName,p_hashedPassword,p_address,p_postcode);
+		INSERT INTO Customer(CustomerEmail,CustomerFirstName,CustomerLastName,CustomerPassword,CustomerAddress1,CustomerAddress2,CustomerPostcode)
+		VALUES(p_email,p_firstName,p_lastName,p_hashedPassword,p_address1,p_address2,p_postcode);
 		SET p_results = 'registered';
 	END IF;
 END;
@@ -103,8 +110,54 @@ DELIMITER ;
 
 -- view all available flights
 CREATE VIEW vw_availableFlights AS
-SELECT FlightPlanOrigin,FlightPlanDestination,JourneyDate,JourneyDepartureTime,JourneyArrivalTime,JourneyAvailableSeats
+SELECT FlightPlanOrigin,FlightPlanDestination,JourneyDate,JourneyDepartureTime,JourneyArrivalTime,JourneyAvailableSeats,FlightPlanCode,JourneyID
 FROM FlightPlan,Journey
 WHERE FlightPlan.FlightPlanID = Journey.FlightPlanID
 AND JourneyAvailableSeats > 0
-AND JourneyStartDate >= CURRENT_DATE()
+AND JourneyDate >= CURRENT_DATE()
+
+-- procedure takes origin, destination, date returns flights
+DELIMITER //
+
+CREATE PROCEDURE pr_searchFlights(p_origin VARCHAR(20),p_destination VARCHAR(20),p_date DATE)
+BEGIN
+	SELECT FlightPlanCode, FlightPlanOrigin, FlightPlanDestination, JourneyDate, JourneyID
+	FROM FlightPlan, Journey
+	WHERE FlightPlan.FlightPlanID = Journey.FlightPlanID
+	AND FlightPlanOrigin = p_origin
+	AND FlightPlanDestination = p_destination
+	AND JourneyAvailableSeats > 0
+	AND JourneyDate = p_date;
+END;
+
+//
+
+DELIMITER ;
+
+-- procedure takes customerID and journeyID and books a flight
+DELIMITER //
+
+CREATE PROCEDURE pr_bookFlight(p_customerID INT,p_journeyID INT)
+BEGIN
+	INSERT INTO Booking(CustomerID,JourneyID)
+	VALUES(p_customerID,p_journeyID);
+END;
+
+//
+
+DELIMITER ;
+
+-- procedure takes customerID and returns all bookings
+DELIMITER //
+
+CREATE PROCEDURE pr_bookings(p_customerID INT)
+BEGIN
+	SELECT FlightPlanCode, FlightPlanOrigin, FlightPlanDestination, JourneyDepartureTime, JourneyArrivalTime, JourneyDate, BookingID
+	FROM FlightPlan, Journey, Booking
+	WHERE FlightPlan.FlightPlanID = Journey.FlightPlanID
+	AND Journey.JourneyID = Booking.JourneyID
+	AND Booking.CustomerID = p_customerID
+	AND Booking.BookingStatus = 'booked';
+END;
+
+//

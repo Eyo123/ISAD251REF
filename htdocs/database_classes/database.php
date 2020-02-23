@@ -10,10 +10,10 @@ class Database
 	public function __construct()
 	{
 	    # set the connection variables
-		$this->DB_SERVER = '???';
-		$this->DB_USER = '???';
-		$this->DB_PASSWORD = '???';
-		$this->DB_DATABASE = '???';
+        $this->DB_SERVER = 'localhost';
+        $this->DB_USER = 'marc';
+        $this->DB_PASSWORD = 'kimchi';
+        $this->DB_DATABASE = 'flightcrew';
 	}
 
 	public function getConnection()
@@ -35,15 +35,15 @@ class Database
 	
 
     # book a flight and get resulting bookingID, if no seats = 0
-    public function bookFlight($customerId, $journeyID)
+    public function bookFlight($customerId, $journeyId)
     {
         $connection = $this->getConnection();
 
         # call customer login procedure
         $sql = "CALL pr_bookFlight (:customerID,:journeyID,@bookingID)";
         $statement = $connection->prepare($sql);
-        $statement->bindValue(':customerId',$orderId);
-		$statement->bindValue(':journeyId',$orderId);
+        $statement->bindValue(':customerID',$customerId);
+		$statement->bindValue(':journeyID',$journeyId);
         $statement->execute();
 
         # get output from procedure
@@ -83,19 +83,20 @@ class Database
     }
 
     # register a new customer, if already registered returns $results = 'already registered'
-    public function registerCustomer($email,$firstName,$lastName,$pass1,$address,$postcode)
+    public function registerCustomer($email,$firstName,$lastName,$pass1,$address1,$address2,$postcode)
     {
         $connection = $this->getConnection();
 
         # call register customer procedure
-        $sql = "CALL pr_registerCustomer (:email,:firstName,:lastName,:hashedPassword,:address,:postcode,@results)";
+        $sql = "CALL pr_registerCustomer (:email,:firstName,:lastName,:hashedPassword,:address1,:address2,:postcode,@results)";
         $statement = $connection->prepare($sql);
         $hashedPassword = password_hash($pass1, PASSWORD_DEFAULT);
         $statement->bindValue(':email',$email);
         $statement->bindValue(':firstName',$firstName);
         $statement->bindValue(':lastName',$lastName);
         $statement->bindValue(':hashedPassword',$hashedPassword);
-		$statement->bindValue(':address',$address);
+		$statement->bindValue(':address1',$address1);
+        $statement->bindValue(':address2',$address2);
 		$statement->bindValue(':postcode',$postcode);
         $statement->execute();
 
@@ -111,4 +112,54 @@ class Database
         return $results;
     }
 
+    public function searchFlights($origin,$destination,$date)
+    {
+        $connection = $this->getConnection();
+
+        # call items flight search procedure
+        $sql = "CALL pr_searchFlights (:origin,:destination,:date)";
+        $statement = $connection->prepare($sql);
+        $statement->bindValue(':origin',$origin);
+        $statement->bindValue(':destination',$destination);
+        $statement->bindValue(':date',$date);
+        $statement->execute();
+
+        $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $statement = null;
+        $connection = null;
+
+        return $rowSet;
+    }
+
+    public function bookings($customerId)
+    {
+        $connection = $this->getConnection();
+
+        # call items flight search procedure
+        $sql = "CALL pr_bookings (:customerID)";
+        $statement = $connection->prepare($sql);
+        $statement->bindValue(':customerID',$customerId);
+        $statement->execute();
+
+        $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $statement = null;
+        $connection = null;
+
+        return $rowSet;
+    }
+
+    public function vw_availableFlights()
+    {
+        $connection = $this->getConnection();
+        $sql = "SELECT * FROM vw_availableFlights";
+        $statement = $connection->query($sql);
+        $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $statement = null;
+        $connection = null;
+
+        return $rowSet;
+    }
 }
