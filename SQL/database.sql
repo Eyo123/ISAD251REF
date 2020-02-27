@@ -51,6 +51,14 @@ CREATE TABLE Booking
 	CONSTRAINT pk_Booking PRIMARY KEY (BookingID)
 );
 
+-- view all available flights
+CREATE VIEW vw_availableFlights AS
+SELECT FlightPlanOrigin,FlightPlanDestination,JourneyDate,JourneyDepartureTime,JourneyArrivalTime,JourneyAvailableSeats,FlightPlanCode,JourneyID
+FROM FlightPlan,Journey
+WHERE FlightPlan.FlightPlanID = Journey.FlightPlanID
+AND JourneyAvailableSeats > 0
+AND JourneyDate >= CURRENT_DATE()
+
 -- book a journey, returns bookingID, if no seats left returns bookingID = 0
 
 DELIMITER //
@@ -135,19 +143,6 @@ BEGIN
 	AND FlightPlanDestination = p_destination
 	AND JourneyAvailableSeats > 0
 	AND JourneyDate = p_date;
-END;
-
-//
-
-DELIMITER ;
-
--- procedure takes customerID and journeyID and books a flight
-DELIMITER //
-
-CREATE PROCEDURE pr_bookFlight(p_customerID INT,p_journeyID INT)
-BEGIN
-	INSERT INTO Booking(CustomerID,JourneyID)
-	VALUES(p_customerID,p_journeyID);
 END;
 
 //
