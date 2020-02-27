@@ -109,6 +109,8 @@ END;
 
 DELIMITER ;
 
+
+
 -- view all available flights
 CREATE VIEW vw_availableFlights AS
 SELECT FlightPlanOrigin,FlightPlanDestination,JourneyDate,JourneyDepartureTime,JourneyArrivalTime,JourneyAvailableSeats,FlightPlanCode,JourneyID

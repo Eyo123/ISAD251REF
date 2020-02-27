@@ -11,8 +11,8 @@ class Database
 	{
 	    # set the connection variables
         $this->DB_SERVER = 'localhost';
-        $this->DB_USER = 'marc';
-        $this->DB_PASSWORD = 'kimchi';
+        $this->DB_USER = 'jackintegrated';
+        $this->DB_PASSWORD = 'Babbage411#';
         $this->DB_DATABASE = 'flightcrew';
 	}
 
@@ -161,5 +161,43 @@ class Database
         $connection = null;
 
         return $rowSet;
+    }
+
+    public function vw_originAirports()
+    {
+        $connection = $this->getConnection();
+        $sql = "SELECT * FROM vw_originairports";
+        $statement = $connection->query($sql);
+        $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $statement = null;
+        $connection = null;
+
+        $airports = array();
+
+        foreach ($rowSet as $currentAirport){
+            $airports[] = $currentAirport['FlightPlanOrigin'] ;
+        }
+
+        return $airports;
+    }
+
+    public function vw_destinationAirports()
+    {
+        $connection = $this->getConnection();
+        $sql = "SELECT * FROM vw_destinationairports";
+        $statement = $connection->query($sql);
+        $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $statement = null;
+        $connection = null;
+
+        $airports = array();
+
+        foreach ($rowSet as $currentAirport){
+            $airports[] = $currentAirport['FlightPlanDestination'] ;
+        }
+
+        return $airports;
     }
 }

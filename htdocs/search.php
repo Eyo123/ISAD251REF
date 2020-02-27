@@ -6,6 +6,12 @@ include_once('includes/header.html');
 require_once('database_classes/database.php');
 require_once ('secure_input.php');
 
+$customerId = $_SESSION['customerId'];
+$database = new Database();
+$originAirports = $database->vw_originAirports();#array("London", "New York", "Geneva");
+$destinationAirports = $database-> vw_destinationAirports();
+
+
 # if registration form submitted need to check it
 if($_SERVER['REQUEST_METHOD']=='POST')
 { 
@@ -24,7 +30,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
       $errors[] = 'Enter the flight arrival place.';
   }
 
-  if (!empty($destination))
+  if (!empty($date))
   {
       $errors[] = 'Enter the flight date.';
   }
@@ -71,13 +77,32 @@ if($_SERVER['REQUEST_METHOD']=='POST')
         <form action="search_results.php" method="post">
             <div class="form-group">
                 <label for="origin">Origin:</label>
-                <input type="text" name="origin" class="form-control" id="origin" size="50"
-                       value="<?php if (isset($_POST['origin'])) echo $_POST['origin']; ?>" required>
+                
+                <?php
+                    print_r($originAirports);
+                ?>
+
+                <select name="origin" class="form-control" id="origin" width="50"
+                value="<?php if (isset($_POST['origin'])) echo $_POST['origin']; ?>" required>>
+                        <?php
+                            foreach ($originAirports as $currentAirport){
+                                echo "<option value=$currentAirport>$currentAirport</option>";
+                            }
+                        ?>
+                </select>
             </div>
             <div class="form-group">
                 <label for="destination">Destination:</label>
-                <input type="text" name="destination" class="form-control" id="destination" size="50"
-                       value="<?php if (isset($_POST['destination'])) echo $_POST['destination']; ?>" required>
+                <select name="destination" class="form-control" id="destination" width="50"
+                value="<?php if (isset($_POST['destination'])) echo $_POST['destination']; ?>" required>>
+                        <?php
+                            foreach ($destinationAirports as $currentAirport){
+                                echo "<option value=$currentAirport>$currentAirport</option>";
+                            }
+                        ?>
+                </select>
+
+                
             </div>
             <div class="form-group">
                 <label for="date">Date:</label>
