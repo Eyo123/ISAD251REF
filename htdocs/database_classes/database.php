@@ -10,10 +10,10 @@ class Database
 	public function __construct()
 	{
 	    # set the connection variables
-        $this->DB_SERVER = 'proj-mysql.uopnet.plymouth.ac.uk';
-        $this->DB_USER = 'PRCO204_X';
-        $this->DB_PASSWORD = 'N52Zbt5JECFQawrQ';
-        $this->DB_DATABASE = 'PRCO204_X';
+        $this->DB_SERVER = 'localhost';
+        $this->DB_USER = 'jackintegrated';
+        $this->DB_PASSWORD = 'Babbage411#';
+        $this->DB_DATABASE = 'flightcrew';
 	}
 
 	public function getConnection()
