@@ -40,7 +40,7 @@ require_once ('secure_input.php');
                     $errors[] = 'Enter the flight date.';
                 }
 
-                echo "Post Variables: <br> $origin <br> $destination <br> $date <br>";
+                # echo "Post Variables: <br> $origin <br> $destination <br> $date <br>";
 
                 # if registration was successful
                 if (empty($errors))

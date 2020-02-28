@@ -1,6 +1,6 @@
 <?php
 
-$page_title = 'Create Account';
+$page_title = 'Flight Search';
 
 include_once('includes/header.html');
 require_once('database_classes/database.php');

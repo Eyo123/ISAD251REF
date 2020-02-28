@@ -59,6 +59,16 @@ WHERE FlightPlan.FlightPlanID = Journey.FlightPlanID
 AND JourneyAvailableSeats > 0
 AND JourneyDate >= CURRENT_DATE()
 
+-- view origin airports
+CREATE VIEW vw_originAirports AS
+SELECT FlightPlanOrigin
+FROM FlightPlan
+
+-- view destination airports
+CREATE VIEW vw_destinationAirports AS
+SELECT FlightPlanDestination
+FROM FlightPlan
+
 -- book a journey, returns bookingID, if no seats left returns bookingID = 0
 
 DELIMITER //
@@ -116,16 +126,6 @@ END;
 //
 
 DELIMITER ;
-
-
-
--- view all available flights
-CREATE VIEW vw_availableFlights AS
-SELECT FlightPlanOrigin,FlightPlanDestination,JourneyDate,JourneyDepartureTime,JourneyArrivalTime,JourneyAvailableSeats,FlightPlanCode,JourneyID
-FROM FlightPlan,Journey
-WHERE FlightPlan.FlightPlanID = Journey.FlightPlanID
-AND JourneyAvailableSeats > 0
-AND JourneyDate >= CURRENT_DATE()
 
 -- procedure takes origin, destination, date returns flights
 DELIMITER //
