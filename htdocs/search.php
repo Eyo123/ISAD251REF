@@ -8,8 +8,8 @@ require_once ('secure_input.php');
 
 
 $database = new Database();
-#$originAirports = $database->vw_originAirports();#array("London", "New York", "Geneva");
-#$destinationAirports = $database-> vw_destinationAirports();
+$originAirports = $database->vw_originAirports();#array("London", "New York", "Geneva");
+$destinationAirports = $database-> vw_destinationAirports();
  
 
 ?>
