@@ -128,7 +128,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
         </form>
     </div>
 	<div class="row">
-        <h3 class="text-info">Available Journeys</h3>
+        <h3 class="text-info">Current Journeys</h3>
         <?php
         $database = new Database();
         # retrieve products which are for sale
