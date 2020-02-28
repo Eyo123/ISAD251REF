@@ -1,0 +1,97 @@
+<AcceptanceTests>
+
+	<RegisterCustomer correct_result="pass">
+		<CustomerFirstName>John</CustomerFirstName>
+		<CustomerLastName>Anderson</CustomerLastName>
+		<CustomerEmail>john@gmail.com</CustomerEmail>
+		<CustomerPassword>1234567890</CustomerPassword>
+		<CustomerAddress1>10 High Street</CustomerAddress1>
+		<CustomerAddress2>Plymouth</CustomerAddress2>
+		<CustomerPostcode>PL7 5AN</CustomerPostcode>
+	</RegisterCustomer>
+
+	<CustomerLogin correct_result="fail">
+		<CustomerEmail>john@gmail.com</CustomerEmail>
+		<CustomerPassword>abcdefghij</CustomerPassword>
+	</CustomerLogin>
+	
+	<CustomerLogin correct_result="fail">
+		<CustomerEmail>james@gmail.com</CustomerEmail>
+		<CustomerPassword>1234567890</CustomerPassword>
+	</CustomerLogin>
+
+	<CustomerLogin correct_result="pass">
+		<CustomerEmail>john@gmail.com</CustomerEmail>
+		<CustomerPassword>1234567890</CustomerPassword>
+	</CustomerLogin>
+	
+	<RegisterCustomer correct_result="fail">
+		<CustomerFirstName>John</CustomerFirstName>
+		<CustomerLastName>Smith</CustomerLastName>
+		<CustomerEmail>john@gmail.com</CustomerEmail>
+		<CustomerPassword>1234567890</CustomerPassword>
+		<CustomerAddress1>5 Broad Street</CustomerAddress1>
+		<CustomerAddress2>Plymouth</CustomerAddress2>
+		<CustomerPostcode>PL1 9AN</CustomerPostcode>
+	</RegisterCustomer>
+	
+	<CreateFlightPlan correct_result="pass">
+		<FlightPlanCode>IS902</FlightPlanCode>
+		<FlightPlanOrigin>Italy</FlightPlanOrigin>
+		<FlightPlanDestination>Scotland</FlightPlanDestination>
+	</CreateFlightPlan>
+		
+	<CreateJourney correct_result="pass">
+		<JourneyDate>2020-10-07</JourneyDate>
+		<JourneyDepartureTime>10.00</JourneyDepartureTime>
+		<JourneyArrivalTime>12.00</JourneyArrivalTime>
+		<JourneyAvailableSeats>100</JourneyAvailableSeats>
+		<JourneyPrice>200.00</JourneyPrice>
+		<FlightPlanID>1</FlightPlanID>
+	</CreateJourney>
+	
+	<BookFlight bookingId="not zero">
+		<CustomerID>1</CustomerID>
+		<JourneyID>1</JourneyID>
+	</BookFlight>
+	
+	<BookFlight bookingId="zero">
+		<CustomerID>-1</CustomerID>
+		<JourneyID>-1</JourneyID>
+	</BookFlight>
+	
+	<BookFlight bookingId="zero">
+		<CustomerID>1</CustomerID>
+		<JourneyID>-1</JourneyID>
+	</BookFlight>
+	
+	<BookFlight bookingId="zero">
+		<CustomerID>-1</CustomerID>
+		<JourneyID>1</JourneyID>
+	</BookFlight>
+	
+	<SearchFlight correct_result="pass">
+		<Origin>Italy</Origin>
+		<Destination>Scotland</Destination>
+		<Date>2020-10-07</Date>
+	</SearchFlight>
+	
+	<SearchFlight correct_result="fail">
+		<Origin>Italy</Origin>
+		<Destination>Germany</Destination>
+		<Date>2020-10-07</Date>
+	</SearchFlight>
+	
+	<SearchFlight correct_result="fail">
+		<Origin>Egypt</Origin>
+		<Destination>Scotland</Destination>
+		<Date>2020-10-07</Date>
+	</SearchFlight>
+	
+	<SearchFlight correct_result="fail">
+		<Origin>Italy</Origin>
+		<Destination>Scotland</Destination>
+		<Date>2020-10-03</Date>
+	</SearchFlight>
+
+</AcceptanceTests>

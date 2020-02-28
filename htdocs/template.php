@@ -21,7 +21,7 @@ require_once('database_classes/database.php');
 		# book a flight
 		$customerID = 1;
 		$journeyID = 1;
-		#$bookingID = $database->pr_BookFlight($customerID,journeyID);
+		#$bookingID = $database->pr_bookFlight($customerID,journeyID);
 		?>
     </div>
 </div>
