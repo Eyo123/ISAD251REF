@@ -59,7 +59,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 <section role="contentinfo" aria-label="Flight Crew Add Flight Page">
 <div class="container">
     <div class="row">
-        <h2 class="bg-dark text-white">Add Flight</h2>
+        <h2 class="bg-dark text-white">Add Flight Plan</h2>
     </div>
     <div class="row">
         <form action="admin_add_flight.php" method="post" id="addFlightPlan">
@@ -85,7 +85,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
         </form>
     </div>
 	<div class="row">
-        <h3 class="text-info">Flight Plans</h3>
+        <h3 class="text-info">Current Flight Plans</h3>
         <?php
         $database = new Database();
         # retrieve products which are for sale
