@@ -127,6 +127,33 @@ if($_SERVER['REQUEST_METHOD']=='POST')
             </div>
         </form>
     </div>
+	<div class="row">
+        <h3 class="text-info">Available Journeys</h3>
+        <?php
+        $database = new Database();
+        # retrieve products which are for sale
+        $rowSet = $database->vw_availableFlights();
+
+        if($rowSet)
+        {
+            print "<table class=\"table table-bordered\">";
+            print "<thead><tr><th scope='col'>Flight Code</th>";
+            print "<th scope='col'>Departure Place</th>";
+            print "<th scope='col'>Arrival Place</th>";
+            print "<th scope='col'>Date</th></tr></thead>";
+
+            foreach ($rowSet as $row)
+            {
+                print "<tbody><tr><td>".$row['FlightPlanCode']."</td>";
+                print "<td>".$row['FlightPlanOrigin']."</td>";
+                print "<td>".$row['FlightPlanDestination']."</td>";
+                print "<td>".$row['JourneyDate']."</td></tr></tbody>";
+            }
+            print "</table>";
+        }
+
+        ?>
+    </div>
 </div>
 </section>
 
