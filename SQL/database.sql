@@ -14,7 +14,7 @@ CREATE TABLE Customer
 CREATE TABLE FlightPlan
 (
 	FlightPlanID INT AUTO_INCREMENT UNIQUE NOT NULL,
-	FlightPlanCode VARCHAR(10) NOT NULL,
+	FlightPlanCode VARCHAR(10) UNIQUE NOT NULL,
 	FlightPlanOrigin VARCHAR(20) NOT NULL,
 	FlightPlanDestination VARCHAR(20) NOT NULL,
 	CONSTRAINT pk_FlightPlan PRIMARY KEY (FlightPlanID)
@@ -67,6 +67,16 @@ FROM FlightPlan
 -- view destination airports
 CREATE VIEW vw_destinationAirports AS
 SELECT FlightPlanDestination
+FROM FlightPlan
+
+-- view flightplan codes
+CREATE VIEW vw_flightPlanCodes AS
+SELECT FlightPlanCode
+FROM FlightPlan
+
+-- view all flight plans
+CREATE VIEW vw_flightPlans AS
+SELECT FlightPlanOrigin,FlightPlanDestination,FlightPlanCode
 FROM FlightPlan
 
 -- book a journey, returns bookingID, if no seats left returns bookingID = 0
@@ -165,3 +175,26 @@ END;
 
 //
 
+-- procedure for adding a flight
+DELIMITER //
+
+CREATE PROCEDURE pr_addFlightPlan(p_flightPlanCode VARCHAR(10), p_flightPlanOrigin VARCHAR(20), p_flightPlanDestination VARCHAR(20))
+BEGIN
+	INSERT INTO FlightPlan(FlightPlanCode,FlightPlanOrigin,FlightPlanDestination)
+	VALUES (p_flightPlanCode,p_flightPlanOrigin,p_flightPlanDestination);
+END;
+
+//
+
+-- procedure for adding a journey
+DELIMITER //
+
+CREATE PROCEDURE pr_addJourney(p_code VARCHAR(10),p_date DATE,p_departureTime VARCHAR(20),p_arrivalTime VARCHAR(20),p_availableSeats INT,p_price DECIMAL(6,2))
+BEGIN
+	DECLARE v_flightPlanID INT;
+	SELECT FlightPlanID INTO v_flightPlanID FROM FlightPlan WHERE FlightPlanCode = p_code;
+	INSERT INTO Journey(JourneyDate,JourneyDepartureTime,JourneyArrivalTime,JourneyAvailableSeats,JourneyPrice,FlightPlanID)
+	VALUES(p_date,p_departureTime,p_arrivalTime,p_availableSeats,p_price,v_flightPlanID);
+END;
+
+//
