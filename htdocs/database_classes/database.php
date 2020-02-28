@@ -166,7 +166,7 @@ class Database
     public function vw_originAirports()
     {
         $connection = $this->getConnection();
-        $sql = "SELECT * FROM vw_originairports";
+        $sql = "SELECT * FROM vw_originAirports";
         $statement = $connection->query($sql);
         $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
 
@@ -185,7 +185,7 @@ class Database
     public function vw_destinationAirports()
     {
         $connection = $this->getConnection();
-        $sql = "SELECT * FROM vw_destinationairports";
+        $sql = "SELECT * FROM vw_destinationAirports";
         $statement = $connection->query($sql);
         $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
 
