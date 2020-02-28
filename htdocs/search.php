@@ -78,31 +78,27 @@ if($_SERVER['REQUEST_METHOD']=='POST')
             <div class="form-group">
                 <label for="origin">Origin:</label>
                 
-                <?php
-                    print_r($originAirports);
-                ?>
-
                 <select name="origin" class="form-control" id="origin" width="50"
                 value="<?php if (isset($_POST['origin'])) echo $_POST['origin']; ?>" required>>
                         <?php
                             foreach ($originAirports as $currentAirport){
-                                echo "<option value=$currentAirport>$currentAirport</option>";
+                                echo '<option value="'.$currentAirport.'">'.$currentAirport.'</option>';
                             }
                         ?>
                 </select>
             </div>
+
             <div class="form-group">
                 <label for="destination">Destination:</label>
                 <select name="destination" class="form-control" id="destination" width="50"
-                value="<?php if (isset($_POST['destination'])) echo $_POST['destination']; ?>" required>>
+                value="<?php if (isset($_POST['destination'])) echo $_POST['destination"']; ?>" required>>
                         <?php
                             foreach ($destinationAirports as $currentAirport){
-                                echo "<option value=$currentAirport>$currentAirport</option>";
+                                echo '<option value="'.$currentAirport.'">'.$currentAirport.'</option>';
                             }
                         ?>
                 </select>
-
-                
+      
             </div>
             <div class="form-group">
                 <label for="date">Date:</label>
