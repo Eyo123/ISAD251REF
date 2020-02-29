@@ -5,6 +5,13 @@ $page_title = "Add Flight";
 include_once('includes/admin_header.html');
 require_once('database_classes/database.php');
 require_once ('secure_input.php');
+require_once('admin_login_tools.php');
+
+# redirect to login page if not logged in
+if (!isset($_SESSION['admin']))
+{
+	load();
+}
 
 # if registration form submitted need to check it
 if($_SERVER['REQUEST_METHOD']=='POST')

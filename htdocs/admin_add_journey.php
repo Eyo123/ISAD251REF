@@ -5,6 +5,13 @@ $page_title = "Add Journey";
 include_once('includes/admin_header.html');
 require_once('database_classes/database.php');
 require_once ('secure_input.php');
+require_once('admin_login_tools.php');
+
+# redirect to login page if not logged in
+if (!isset($_SESSION['admin']))
+{
+	load();
+}
 
 $database = new Database();
 $flightPlanCodes = $database->vw_flightPlanCodes();

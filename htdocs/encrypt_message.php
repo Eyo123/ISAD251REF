@@ -2,13 +2,13 @@
 
 $page_title = "Generate a Secure Message";
 
-include_once('includes/admin_header.html');
+include_once('includes/header.html');
 require_once ('secure_input.php');
 require_once ('caesar_cipher.php');
-require_once('admin_login_tools.php');
+require_once('login_tools.php');
 
 # redirect to login page if not logged in
-if (!isset($_SESSION['admin']))
+if (!isset($_SESSION['customerId']))
 {
 	load();
 }
@@ -43,7 +43,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
   {
     echo '<h3 class="text-info">Result</h3>';
 	echo $result;
-    include_once('includes/admin_footer.html');
+    include_once('includes/footer.html');
     exit();
   }
   else 
@@ -59,13 +59,13 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 
 ?>
 
-<section role="contentinfo" aria-label="Tempest Flights Generate a Secure Message Admin Page">
+<section role="contentinfo" aria-label="Tempest Flights Generate a Secure Message Page">
 <div class="container">
     <div class="row">
         <h2 class="bg-dark text-white">Generate a Secure Message</h2>
     </div>
     <div class="row">
-        <form action="admin_encrypt_message.php" method="post" id="encrypt_message">
+        <form action="encrypt_message.php" method="post" id="encrypt_message">
             <div class="form-group">
                 <label for="message">Message:</label>
                 <textarea rows="10" name="message" class="form-control" id="message" required></textarea>
@@ -87,6 +87,6 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 
 <?php
 
-include_once('includes/admin_footer.html');
+include_once('includes/footer.html');
 
 ?>
