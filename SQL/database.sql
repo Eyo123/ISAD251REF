@@ -53,7 +53,7 @@ CREATE TABLE Booking
 
 -- view all available flights
 CREATE VIEW vw_availableFlights AS
-SELECT FlightPlanOrigin,FlightPlanDestination,JourneyDate,JourneyDepartureTime,JourneyArrivalTime,JourneyAvailableSeats,FlightPlanCode,JourneyID
+SELECT FlightPlanOrigin,FlightPlanDestination,JourneyDate,JourneyDepartureTime,JourneyArrivalTime,JourneyAvailableSeats,FlightPlanCode,JourneyID,JourneyPrice
 FROM FlightPlan,Journey
 WHERE FlightPlan.FlightPlanID = Journey.FlightPlanID
 AND JourneyAvailableSeats > 0

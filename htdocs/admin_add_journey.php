@@ -140,14 +140,22 @@ if($_SERVER['REQUEST_METHOD']=='POST')
             print "<thead><tr><th scope='col'>Flight Code</th>";
             print "<th scope='col'>Departure Place</th>";
             print "<th scope='col'>Arrival Place</th>";
-            print "<th scope='col'>Date</th></tr></thead>";
+            print "<th scope='col'>Date</th>";
+			print "<th scope='col'>Departure Time</th>";
+			print "<th scope='col'>Arrival Time</th>";
+			print "<th scope='col'>Available Seats</th>";
+			print "<th scope='col'>Price</th></tr></thead>";
 
             foreach ($rowSet as $row)
             {
                 print "<tbody><tr><td>".$row['FlightPlanCode']."</td>";
                 print "<td>".$row['FlightPlanOrigin']."</td>";
                 print "<td>".$row['FlightPlanDestination']."</td>";
-                print "<td>".$row['JourneyDate']."</td></tr></tbody>";
+                print "<td>".$row['JourneyDate']."</td>";
+				print "<td>".$row['JourneyDepartureTime']."</td>";
+				print "<td>".$row['JourneyArrivalTime']."</td>";
+				print "<td>".$row['JourneyAvailableSeats']."</td>";
+				print "<td>".$row['JourneyPrice']."</td></tr></tbody>";
             }
             print "</table>";
         }
