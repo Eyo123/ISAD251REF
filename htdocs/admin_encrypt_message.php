@@ -1,6 +1,6 @@
 <?php
 
-$page_title = "Encrypt Message";
+$page_title = "Generate a Secure Message";
 
 include_once('includes/admin_header.html');
 require_once ('secure_input.php');
@@ -20,13 +20,47 @@ if($_SERVER['REQUEST_METHOD']=='POST')
   # encrypt or decrypt the message
   if(empty($errors))
   {
-	if($action = "encrypt")
+	if($action == "encrypt")
 	{
-		
+		$key = array(
+		"A" => "D", "B" => "E","C" => "F", "D" => "G","E" => "H","F" => "I",
+		"G" => "J", "H" => "K", "I" => "L", "J" => "M","K" => "N",
+		"L" => "O","M" => "P", "N" => "Q", "O" => "R", 
+		"P" => "S","Q" => "T", "R" => "U","S" => "V","T" => "W", 
+		"U" => "X", "V" => "Y", "W" => "Z", "X" => "A",
+		"Y" => "B", "Z" => "C"
+		);
+
+		$length=strlen($message);
+		$result='';
+		for ($i = 0; $i < $length; $i++) 
+		{
+			if (in_array(strtoupper($message[$i]), array_flip($key)))
+			{
+				$result .= $key[strtoupper($message[$i])];
+			}
+		}
 	}
-	else if($action = "decrypt")
+	else if($action == "decrypt")
 	{
-		
+		$key = array(
+		"A" => "X", "B" => "Y","C" => "Z", "D" => "A","E" => "B","F" => "C",
+		"G" => "D", "H" => "E", "I" => "F", "J" => "G","K" => "H",
+		"L" => "I","M" => "J", "N" => "K", "O" => "L", 
+		"P" => "M","Q" => "N", "R" => "O","S" => "P","T" => "Q", 
+		"U" => "R", "V" => "S", "W" => "T", "X" => "U",
+		"Y" => "V", "Z" => "W"
+		);
+
+		$length=strlen($message);
+		$result='';
+		for ($i = 0; $i < $length; $i++) 
+		{
+			if (in_array(strtoupper($message[$i]), array_flip($key)))
+			{
+				$result .= $key[strtoupper($message[$i])];
+			}
+		}
 	}
   }
   
@@ -51,22 +85,22 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 
 ?>
 
-<section role="contentinfo" aria-label="Flight Crew Add Journey Page">
+<section role="contentinfo" aria-label="Tempest Flights Generate a Secure Message Page">
 <div class="container">
     <div class="row">
-        <h2 class="bg-dark text-white">Add Journey</h2>
+        <h2 class="bg-dark text-white">Generate a Secure Message</h2>
     </div>
     <div class="row">
         <form action="admin_encrypt_message.php" method="post" id="encrypt_message">
             <div class="form-group">
                 <label for="message">Message:</label>
-                <textarea rows="10" cols="50" name="message" class="form-control" id="message" required></textarea>
+                <textarea rows="10" name="message" class="form-control" id="message" required></textarea>
             </div>
-			<div class="form-group">
-                <label for="encrypt">Encypt:</label>
-                <input type="radio" name="action" class="form-control" id="encrypt" value="encrypt">
-				<label for="decrypt">Decrypt:</label>
-                <input type="radio" name="action" class="form-control" id="decrypt" value="decrypt">
+			<div class="radio">
+				<label><input type="radio" name="action" value="encrypt" checked>Encrypt</label>
+            </div>
+			<div class="radio">
+				<label><input type="radio" name="action" value="decrypt">Decrypt</label>
             </div>
             <div class="form-group">
                 <p><input type="submit" value="Calculate">
