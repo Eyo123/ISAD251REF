@@ -51,7 +51,7 @@ CREATE TABLE Booking
 	CONSTRAINT pk_Booking PRIMARY KEY (BookingID)
 );
 
--- view all available flights***
+-- view all available flights
 CREATE VIEW vw_availableFlights AS
 SELECT FlightPlanOrigin,FlightPlanDestination,JourneyDate,JourneyDepartureTime,JourneyArrivalTime,JourneyAvailableSeats,FlightPlanCode,JourneyID,JourneyPrice,DATE_FORMAT(JourneyDate, '%d/%m/%Y') AS JourneyDateFormatted
 FROM FlightPlan,Journey
@@ -137,7 +137,7 @@ END;
 
 DELIMITER ;
 
--- procedure takes origin, destination, date returns flights***
+-- procedure takes origin, destination, date returns flights
 DELIMITER //
 
 CREATE PROCEDURE pr_searchFlights(p_origin VARCHAR(20),p_destination VARCHAR(20),p_date DATE)
@@ -159,7 +159,7 @@ END;
 
 DELIMITER ;
 
--- procedure takes customerID and returns all bookings***
+-- procedure takes customerID and returns all bookings
 DELIMITER //
 
 CREATE PROCEDURE pr_bookings(p_customerID INT)
@@ -175,6 +175,8 @@ END;
 
 //
 
+DELIMITER ;
+
 -- procedure for adding a flight
 DELIMITER //
 
@@ -185,6 +187,8 @@ BEGIN
 END;
 
 //
+
+DELIMITER ;
 
 -- procedure for adding a journey
 DELIMITER //
@@ -198,3 +202,5 @@ BEGIN
 END;
 
 //
+
+DELIMITER ;
