@@ -12,9 +12,13 @@ function encrypt($text, $s)
 			$result = $result.chr((ord($text[$i]) + $s - 65) % 26 + 65);
 		}
 		// Encrypt Lowercase letters 
-		else
+		else if (ctype_lower($text[$i]))
 		{
 			$result = $result.chr((ord($text[$i]) + $s - 97) % 26 + 97);
+		}
+		else
+		{
+			$result = $result.$text[$i];
 		}
 	} 
 
