@@ -51,7 +51,7 @@ if (!isset($_SESSION['customerId']))
 		}
 		else
 		{
-			print 'You do not have any bookings.';
+			print '<h3 class="text-info">You do not have any bookings.</h3>';
 		}
 		
 		?>

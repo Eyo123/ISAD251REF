@@ -8,9 +8,10 @@ include_once('includes/admin_header.html');
 # print any error messages
 if (isset($errors) && !empty($errors))
 {
+ echo '<div class="container"><div class="row">';
  echo '<p class="text-info">There was a problem:<br>' ;
  foreach ( $errors as $msg ) { echo " - $msg<br>" ; }
- echo 'Please try again</p>' ;
+ echo 'Please try again</p></div></div>' ;
 }
 ?>
 

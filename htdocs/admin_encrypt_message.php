@@ -41,19 +41,24 @@ if($_SERVER['REQUEST_METHOD']=='POST')
   # if registration was successful
   if (empty($errors)) 
   {
-    echo '<h3 class="text-info">Result</h3>';
+	echo '<div class="container"><div class="row">';
+    echo '<h3 class="text-info">Result</h3></div>';
+	echo '<div class="row"><h4>';
 	echo $result;
+	echo '</h4>';
+	echo '</div></div>';
     include_once('includes/admin_footer.html');
     exit();
   }
   else 
   {
+	echo '<div class="container"><div class="row">';
     echo '<p class="text-info">The following error(s) occurred:<br>' ;
     foreach ($errors as $msg)
     {
         echo " - $msg<br>";
     }
-    echo 'Please try again.</p>';
+    echo 'Please try again.</p></div></div>';
   }  
 }
 

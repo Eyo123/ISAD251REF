@@ -41,8 +41,12 @@ if($_SERVER['REQUEST_METHOD']=='POST')
   # if registration was successful
   if (empty($errors)) 
   {
-    echo '<h3 class="text-info">Result</h3>';
+	echo '<div class="container"><div class="row">';
+    echo '<h3 class="text-info">Result</h3></div>';
+	echo '<div class="row"><h4>';
 	echo $result;
+	echo '</h4>';
+	echo '</div></div>';
     include_once('includes/footer.html');
     exit();
   }
