@@ -51,9 +51,9 @@ CREATE TABLE Booking
 	CONSTRAINT pk_Booking PRIMARY KEY (BookingID)
 );
 
--- view all available flights
+-- view all available flights***
 CREATE VIEW vw_availableFlights AS
-SELECT FlightPlanOrigin,FlightPlanDestination,JourneyDate,JourneyDepartureTime,JourneyArrivalTime,JourneyAvailableSeats,FlightPlanCode,JourneyID,JourneyPrice
+SELECT FlightPlanOrigin,FlightPlanDestination,JourneyDate,JourneyDepartureTime,JourneyArrivalTime,JourneyAvailableSeats,FlightPlanCode,JourneyID,JourneyPrice,DATE_FORMAT(JourneyDate, '%d/%m/%Y') AS JourneyDateFormatted
 FROM FlightPlan,Journey
 WHERE FlightPlan.FlightPlanID = Journey.FlightPlanID
 AND JourneyAvailableSeats > 0
@@ -137,7 +137,7 @@ END;
 
 DELIMITER ;
 
--- procedure takes origin, destination, date returns flights
+-- procedure takes origin, destination, date returns flights***
 DELIMITER //
 
 CREATE PROCEDURE pr_searchFlights(p_origin VARCHAR(20),p_destination VARCHAR(20),p_date DATE)
@@ -146,7 +146,7 @@ BEGIN
 	THEN
 		SET p_date = CURRENT_DATE();
 	END IF;
-	SELECT FlightPlanCode, FlightPlanOrigin, FlightPlanDestination, JourneyDate, JourneyID
+	SELECT FlightPlanCode, FlightPlanOrigin, FlightPlanDestination, JourneyDate, JourneyID,DATE_FORMAT(JourneyDate, '%d/%m/%Y') AS JourneyDateFormatted
 	FROM FlightPlan, Journey
 	WHERE FlightPlan.FlightPlanID = Journey.FlightPlanID
 	AND FlightPlanOrigin = p_origin
@@ -159,12 +159,12 @@ END;
 
 DELIMITER ;
 
--- procedure takes customerID and returns all bookings
+-- procedure takes customerID and returns all bookings***
 DELIMITER //
 
 CREATE PROCEDURE pr_bookings(p_customerID INT)
 BEGIN
-	SELECT FlightPlanCode, FlightPlanOrigin, FlightPlanDestination, JourneyDepartureTime, JourneyArrivalTime, JourneyDate, BookingID
+	SELECT FlightPlanCode, FlightPlanOrigin, FlightPlanDestination, JourneyDepartureTime, JourneyArrivalTime, JourneyDate, BookingID,DATE_FORMAT(JourneyDate, '%d/%m/%Y') AS JourneyDateFormatted
 	FROM FlightPlan, Journey, Booking
 	WHERE FlightPlan.FlightPlanID = Journey.FlightPlanID
 	AND Journey.JourneyID = Booking.JourneyID
