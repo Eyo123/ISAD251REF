@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
   $pass = secure_input($_POST['pass']);
 
   # validate the user
-  list($check,$data) = validate($email,$pass) ;
+  list($check,$data,$customerName) = validate($email,$pass) ;
 
   # if the password was correct
   if($check)
@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     # start the session, set session email value, and load the index page
     session_start();
     $_SESSION['customerId'] = $data;
+	$_SESSION['customerName'] = $customerName;
     load('index.php') ;
   }
   # or load the error array with the errors

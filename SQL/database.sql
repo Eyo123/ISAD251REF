@@ -104,10 +104,12 @@ DELIMITER ;
 -- procedure takes email and returns hashed password and customerId, if no matching email returns customerId = 0
 DELIMITER //
 
-CREATE PROCEDURE pr_customerLogin (p_email VARCHAR(50),OUT p_hashedPassword VARCHAR(100),OUT p_customerId INT)
+CREATE PROCEDURE pr_customerLogin (p_email VARCHAR(50),OUT p_hashedPassword VARCHAR(100),OUT p_customerId INT,OUT p_customerFirstName VARCHAR(20),OUT p_customerLastName VARCHAR(20))
 BEGIN
 	SELECT customerId INTO p_customerId FROM Customer WHERE customerEmail = p_email;
 	SELECT CustomerPassword INTO p_hashedPassword FROM Customer WHERE customerEmail = p_email;
+	SELECT CustomerFirstName INTO p_customerFirstName FROM Customer WHERE customerEmail = p_email;
+	SELECT CustomerLastName INTO p_customerLastName FROM Customer WHERE customerEmail = p_email;
 	IF NOT EXISTS (SELECT customerId FROM Customer WHERE customerEmail = p_email)
 	THEN
 		SET p_customerId = 0;

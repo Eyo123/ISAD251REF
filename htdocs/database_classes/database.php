@@ -64,22 +64,25 @@ class Database
         $connection = $this->getConnection();
 
         # call customer login procedure
-        $sql = "CALL pr_customerLogin (:email,@hashedPassword,@customerId)";
+        $sql = "CALL pr_customerLogin (:email,@hashedPassword,@customerId,@customerFirstName,@customerLastName)";
         $statement = $connection->prepare($sql);
         $statement->bindValue(':email',$email);
         $statement->execute();
 
         # get output from procedure
-        $sql = "SELECT @hashedPassword,@customerId";
+        $sql = "SELECT @hashedPassword,@customerId,@customerFirstName,@customerLastName";
         $statement = $connection->query($sql);
         $row = $statement->fetch (PDO::FETCH_NUM);
         $hashedPassword = $row[0];
         $customerId = $row[1];
+		$customerFirstName = $row[2];
+		$customerLastName = $row[3];
+		$customerName = $customerFirstName . " " . $customerLastName;
 
         $statement = null;
         $getConnection = null;
 
-        return array($hashedPassword,$customerId);
+        return array($hashedPassword,$customerId,$customerName);
     }
 
     # register a new customer, if already registered returns $results = 'already registered'
