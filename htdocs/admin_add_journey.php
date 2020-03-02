@@ -122,12 +122,12 @@ if($_SERVER['REQUEST_METHOD']=='POST')
             </div>
 			<div class="form-group">
                 <label for="availableSeats">Available Seats:</label>
-                <input type="text" name="availableSeats" class="form-control" id="availableSeats" size="50"
+                <input type="number" min="0" step="1" name="availableSeats" class="form-control" id="availableSeats" size="50"
                        value="<?php if (isset($_POST['availableSeats'])) echo $_POST['availableSeats']; ?>" required>
             </div>
 			<div class="form-group">
                 <label for="price">Price:</label>
-                <input type="text" name="price" class="form-control" id="price" size="50"
+                <input type="number" min="0" step="0.01" name="price" class="form-control" id="price" size="50"
                        value="<?php if (isset($_POST['price'])) echo $_POST['price']; ?>" required>
             </div>
             <div class="form-group">
