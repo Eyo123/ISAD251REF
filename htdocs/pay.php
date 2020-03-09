@@ -24,13 +24,12 @@ if (!isset($_SESSION['customerId']))
             # if the customer wish to pay
             if (isset($_GET['id']))
             {
-                $journeyId = $_GET['id'];
-                $customerId = $_SESSION['customerId'];
+                $bookingID = $_GET['id'];
 
                 $database = new Database();
-                $database->bookFlight($customerId,$journeyId);
+                $database->confirmFlight($bookingID);
 
-                echo '<h3 class="text-info">you have confirm your booking</h3>';
+                echo '<h3 class="text-info">you have confirmed your booking</h3>';
             }
             else
             {

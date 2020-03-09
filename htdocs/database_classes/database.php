@@ -152,6 +152,24 @@ class Database
 
         return $rowSet;
     }
+	
+	public function confirmedBookings($customerId)
+    {
+        $connection = $this->getConnection();
+
+        # call items flight search procedure
+        $sql = "CALL pr_confirmedBookings (:customerID)";
+        $statement = $connection->prepare($sql);
+        $statement->bindValue(':customerID',$customerId);
+        $statement->execute();
+
+        $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $statement = null;
+        $connection = null;
+
+        return $rowSet;
+    }
 
     public function vw_availableFlights()
     {
@@ -235,6 +253,21 @@ class Database
 		$statement->bindValue(':arrivalTime',$arrivalTime);
         $statement->bindValue(':availableSeats',$availableSeats);
         $statement->bindValue(':price',$price);
+        $statement->execute();
+
+        $statement = null;
+        $getConnection = null;
+    }
+	
+	# confirm a flight
+    public function confirmFlight($bookingID)
+    {
+        $connection = $this->getConnection();
+
+        # call confirmFlight procedure
+        $sql = "CALL pr_confirmFlight (:bookingID)";
+        $statement = $connection->prepare($sql);
+        $statement->bindValue(':bookingID',$bookingID);
         $statement->execute();
 
         $statement = null;

@@ -80,7 +80,6 @@ SELECT FlightPlanOrigin,FlightPlanDestination,FlightPlanCode
 FROM FlightPlan
 
 -- book a journey, returns bookingID, if no seats left returns bookingID = 0
-
 DELIMITER //
 
 CREATE PROCEDURE pr_bookFlight(p_customerID INT, p_journeyID INT, OUT p_bookingID INT)
@@ -95,6 +94,38 @@ BEGIN
 	ELSE
 		SET p_bookingID = 0;
 	END IF;
+END;
+
+//
+
+DELIMITER ;
+
+-- pay for and confirm a flight
+DELIMITER //
+
+CREATE PROCEDURE pr_confirmFlight(p_bookingID INT)
+BEGIN
+	UPDATE Booking
+	SET BookingStatus = 'confirmed'
+	WHERE BookingID = p_bookingID;
+END;
+
+//
+
+DELIMITER ;
+
+-- procedure takes customerID and returns all confirmed bookings
+DELIMITER //
+
+CREATE PROCEDURE pr_confirmedBookings(p_customerID INT)
+BEGIN
+	SELECT FlightPlanCode, FlightPlanOrigin, FlightPlanDestination, JourneyDepartureTime, JourneyArrivalTime, JourneyDate, BookingID,DATE_FORMAT(JourneyDate, '%d/%m/%Y') AS JourneyDateFormatted
+	FROM FlightPlan, Journey, Booking
+	WHERE FlightPlan.FlightPlanID = Journey.FlightPlanID
+	AND Journey.JourneyID = Booking.JourneyID
+	AND Booking.CustomerID = p_customerID
+	AND JourneyDate >= CURRENT_DATE()
+	AND Booking.BookingStatus = 'confirmed';
 END;
 
 //

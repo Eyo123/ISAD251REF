@@ -28,6 +28,7 @@ if (!isset($_SESSION['customerId']))
 
 		if($rowSet)
 		{
+			print '<h3 class="text-info">Uncomfirmed bookings:</h3>';
             print "<table class=\"table table-bordered\">";
             print "<thead><tr><th scope='col'>Flight Code</th>";
             print "<th scope='col'>Departure Place</th>";
@@ -51,7 +52,43 @@ if (!isset($_SESSION['customerId']))
 		}
 		else
 		{
-			print '<h3 class="text-info">You do not have any bookings.</h3>';
+			print '<h3 class="text-info">You do not have any uncomfirmed bookings.</h3>';
+		}
+		
+		?>
+    </div>
+	<div class="row">
+        <?php
+		$customerId = $_SESSION['customerId'];
+		$database = new Database();
+		# retrieve bookings by customerID
+		$rowSet = $database->confirmedBookings($customerId);
+
+		if($rowSet)
+		{
+			print '<h3 class="text-info">Comfirmed bookings:</h3>';
+            print "<table class=\"table table-bordered\">";
+            print "<thead><tr><th scope='col'>Flight Code</th>";
+            print "<th scope='col'>Departure Place</th>";
+            print "<th scope='col'>Arrival Place</th>";
+            print "<th scope='col'>Date</th>";
+            print "<th scope='col'>Departure Time</th>";
+            print "<th scope='col'>Arrival Time</th></tr></thead>";
+
+            foreach ($rowSet as $row)
+            {
+                print "<tbody><tr><td>".$row['FlightPlanCode']."</td>";
+                print "<td>".$row['FlightPlanOrigin']."</td>";
+                print "<td>".$row['FlightPlanDestination']."</td>";
+                print "<td>".$row['JourneyDateFormatted']."</td>";
+                print "<td>".$row['JourneyDepartureTime']."</td>";
+                print "<td>".$row['JourneyArrivalTime']."</td></tr></tbody>";
+            }
+            print "</table>";
+		}
+		else
+		{
+			print '<h3 class="text-info">You do not have any comfirmed bookings.</h3>';
 		}
 		
 		?>
