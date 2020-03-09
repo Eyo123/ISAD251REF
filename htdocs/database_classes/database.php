@@ -57,6 +57,8 @@ class Database
 
         return $bookingID;
     }
+
+    
 	
 	# will return a customerId of 0 if not found, returns the hashes password and customerId for an email address
     public function customerLogin($email)
@@ -152,6 +154,24 @@ class Database
 
         return $rowSet;
     }
+	
+	public function confirmedBookings($customerId)
+    {
+        $connection = $this->getConnection();
+
+        # call items flight search procedure
+        $sql = "CALL pr_confirmedBookings (:customerID)";
+        $statement = $connection->prepare($sql);
+        $statement->bindValue(':customerID',$customerId);
+        $statement->execute();
+
+        $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $statement = null;
+        $connection = null;
+
+        return $rowSet;
+    }
 
     public function vw_availableFlights()
     {
@@ -235,6 +255,35 @@ class Database
 		$statement->bindValue(':arrivalTime',$arrivalTime);
         $statement->bindValue(':availableSeats',$availableSeats);
         $statement->bindValue(':price',$price);
+        $statement->execute();
+
+        $statement = null;
+        $getConnection = null;
+    }
+	
+	# confirm a flight
+    public function confirmFlight($bookingID)
+    {
+        $connection = $this->getConnection();
+
+        # call confirmFlight procedure
+        $sql = "CALL pr_confirmFlight (:bookingID)";
+        $statement = $connection->prepare($sql);
+        $statement->bindValue(':bookingID',$bookingID);
+        $statement->execute();
+
+        $statement = null;
+        $getConnection = null;
+    }
+
+    #cancel a booking for a flight
+    public function cancelBooking($bookingID){
+
+        $connection = $this->getConnection();
+
+        $sql = "CALL pr_cancelBooking(:bookingID)";
+        $statement = $connection->prepare($sql);
+        $statement->bindValue(':bookingID',$bookingID);
         $statement->execute();
 
         $statement = null;
