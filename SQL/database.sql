@@ -193,11 +193,11 @@ END;
 DELIMITER ;
 
 -- procedure takes booking and sets it's status to cancelled
-Create PROCEDURE pr_cancelBooking (p_bookingid INT)
+Create PROCEDURE pr_cancelBooking (p_bookingID INT)
 BEGIN
-UPDATE p_booking
-SET BookingStatus='canceled'
-WHERE p_bookingid = p_booking
+	UPDATE Booking
+	SET BookingStatus = 'cancelled'
+	WHERE BookingID = p_bookingID;
 END;
 
 -- procedure takes customerID and returns all bookings
