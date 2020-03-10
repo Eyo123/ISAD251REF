@@ -21,13 +21,9 @@ if (!isset($_SESSION['customerId']))
     </div>
 	<div class="row">
         <?php
-            echo($_GET['id']);
-
             # if the customer wishes to cancel
             if (isset($_GET['id']))
             {
-                
-
                 $bookingID = $_GET['id'];
 
                 $database = new Database();
@@ -39,8 +35,7 @@ if (!isset($_SESSION['customerId']))
             {
                 echo '<h3 class="text-info">We could not cancel that booking. Please check the booking exists.</h3>';
             }
-            ?>
-    
+            ?> 
 </div>
 </section>
 
