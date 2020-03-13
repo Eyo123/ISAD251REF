@@ -41,12 +41,12 @@ function validate($email='',$pwd='')
       # retrieve the customerId and hashed password for this customer email
 	$database = new Database();
 	# if email is not found customerId will be set to 0
-	list($hashedPassword,$customerId) = $database->customerLogin($email);
+	list($hashedPassword,$customerId,$customerName) = $database->customerLogin($email);
 	
     if($customerId != 0 && password_verify($pwd,$hashedPassword))
     {
         # return true and customerId in an array
-        return array(true,$customerId);
+        return array(true,$customerId,$customerName);
     }
 
     # otherwise add an error that they were not found

@@ -17,7 +17,7 @@
   </head>
 
   <body>
-      <div class="container bg-success">
+      <div class="container bg-info">
           <div class="row d-flex justify-content-between">
               <h1>Tempest Flights</h1>
               <?php
@@ -27,7 +27,7 @@
                 if(isset($_SESSION['customerId']) && $page_title != "Logout")
                 {
                     # state who you are logged in as
-                    echo "<p>You are logged in as customer#{$_SESSION['customerId']}
+                    echo "<p>You are logged in as {$_SESSION['customerName']}
                         <a href=\"logout.php\" class=\"btn btn-info\">logout</a></p>";
                 }
                 else
@@ -48,6 +48,9 @@
                       </li>
                       <li class="nav-item">
                           <a class="nav-link active" href="bookings.php">Bookings</a>
+                      </li>
+					  <li class="nav-item">
+                          <a class="nav-link active" href="encrypt_message.php">Contact</a>
                       </li>
                   </ul>
                   <br>

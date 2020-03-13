@@ -29,11 +29,12 @@ if (!isset($_SESSION['customerId']))
 
             $database = new Database();
             $database->bookFlight($customerId,$journeyId);
-            echo "Flight successfully booked";
+			
+            echo '<h3 class="text-info">Flight successfully booked</h3>';
         }
         else
         {
-            echo "No flight booked";
+            echo '<h3 class="text-info">No flight booked</h3>';
         }
     ?>
     </div>

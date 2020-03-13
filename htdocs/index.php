@@ -36,7 +36,7 @@ include_once('includes/header.html');
                 print "<tbody><tr><td>".$row['FlightPlanCode']."</td>";
                 print "<td>".$row['FlightPlanOrigin']."</td>";
                 print "<td>".$row['FlightPlanDestination']."</td>";
-                print "<td>".$row['JourneyDate']."</td>";
+                print "<td>".$row['JourneyDateFormatted']."</td>";
                 print '<td><a href="book.php?id='.$row['JourneyID'].'" class="btn btn-info">Book</a></td></tr></tbody>';
             }
             print "</table>";

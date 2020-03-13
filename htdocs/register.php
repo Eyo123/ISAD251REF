@@ -72,18 +72,20 @@ if($_SERVER['REQUEST_METHOD']=='POST')
   # if registration was successful
   if (empty($errors)) 
   {
-    echo '<h3 class="test-info">You are now registered</h3><h4><a href="login.php">Login</a></h4>';
+	echo '<div class="container"><div class="row">';
+    echo '<h3 class="test-info">You are now registered</h3><h4><a href="login.php">Login</a></h4></div></div>';
     include_once('includes/footer.html');
     exit();
   }
   else 
   {
+	echo '<div class="container"><div class="row">';
     echo '<p class="text-info">The following error(s) occurred:<br>' ;
     foreach ($errors as $msg)
     {
         echo " - $msg<br>";
     }
-    echo 'Please try again.</p>';
+    echo 'Please try again.</p></div></div>';
   }  
 }
 ?>

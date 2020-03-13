@@ -10,10 +10,10 @@ class Database
 	public function __construct()
 	{
 	    # set the connection variables
-        $this->DB_SERVER = 'localhost';
-        $this->DB_USER = 'jackintegrated';
-        $this->DB_PASSWORD = 'Babbage411#';
-        $this->DB_DATABASE = 'flightcrew';
+        $this->DB_SERVER = 'proj-mysql.uopnet.plymouth.ac.uk';
+        $this->DB_USER = 'PRCO204_X';
+        $this->DB_PASSWORD = 'N52Zbt5JECFQawrQ';
+        $this->DB_DATABASE = 'PRCO204_X';
 	}
 
 	public function getConnection()
@@ -57,6 +57,8 @@ class Database
 
         return $bookingID;
     }
+
+    
 	
 	# will return a customerId of 0 if not found, returns the hashes password and customerId for an email address
     public function customerLogin($email)
@@ -64,22 +66,25 @@ class Database
         $connection = $this->getConnection();
 
         # call customer login procedure
-        $sql = "CALL pr_customerLogin (:email,@hashedPassword,@customerId)";
+        $sql = "CALL pr_customerLogin (:email,@hashedPassword,@customerId,@customerFirstName,@customerLastName)";
         $statement = $connection->prepare($sql);
         $statement->bindValue(':email',$email);
         $statement->execute();
 
         # get output from procedure
-        $sql = "SELECT @hashedPassword,@customerId";
+        $sql = "SELECT @hashedPassword,@customerId,@customerFirstName,@customerLastName";
         $statement = $connection->query($sql);
         $row = $statement->fetch (PDO::FETCH_NUM);
         $hashedPassword = $row[0];
         $customerId = $row[1];
+		$customerFirstName = $row[2];
+		$customerLastName = $row[3];
+		$customerName = $customerFirstName . " " . $customerLastName;
 
         $statement = null;
         $getConnection = null;
 
-        return array($hashedPassword,$customerId);
+        return array($hashedPassword,$customerId,$customerName);
     }
 
     # register a new customer, if already registered returns $results = 'already registered'
@@ -149,6 +154,24 @@ class Database
 
         return $rowSet;
     }
+	
+	public function confirmedBookings($customerId)
+    {
+        $connection = $this->getConnection();
+
+        # call items flight search procedure
+        $sql = "CALL pr_confirmedBookings (:customerID)";
+        $statement = $connection->prepare($sql);
+        $statement->bindValue(':customerID',$customerId);
+        $statement->execute();
+
+        $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $statement = null;
+        $connection = null;
+
+        return $rowSet;
+    }
 
     public function vw_availableFlights()
     {
@@ -166,7 +189,7 @@ class Database
     public function vw_originAirports()
     {
         $connection = $this->getConnection();
-        $sql = "SELECT * FROM vw_originairports";
+        $sql = "SELECT * FROM vw_originAirports";
         $statement = $connection->query($sql);
         $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
 
@@ -185,7 +208,7 @@ class Database
     public function vw_destinationAirports()
     {
         $connection = $this->getConnection();
-        $sql = "SELECT * FROM vw_destinationairports";
+        $sql = "SELECT * FROM vw_destinationAirports";
         $statement = $connection->query($sql);
         $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
 
@@ -199,5 +222,103 @@ class Database
         }
 
         return $airports;
+    }
+	
+	# add a new flight plan
+    public function addFlightPlan($flightPlanCode,$flightPlanOrigin,$flightPlanDestination)
+    {
+        $connection = $this->getConnection();
+
+        # call addFlightPlan procedure
+        $sql = "CALL pr_addFlightPlan (:flightPlanCode,:flightPlanOrigin,:flightPlanDestination)";
+        $statement = $connection->prepare($sql);
+        $statement->bindValue(':flightPlanCode',$flightPlanCode);
+        $statement->bindValue(':flightPlanOrigin',$flightPlanOrigin);
+        $statement->bindValue(':flightPlanDestination',$flightPlanDestination);
+        $statement->execute();
+
+        $statement = null;
+        $getConnection = null;
+    }
+	
+	# add a new journey
+    public function addJourney($code,$date,$departureTime,$arrivalTime,$availableSeats,$price)
+    {
+        $connection = $this->getConnection();
+
+        # call addFlightPlan procedure
+        $sql = "CALL pr_addJourney (:code,:date,:departureTime,:arrivalTime,:availableSeats,:price)";
+        $statement = $connection->prepare($sql);
+        $statement->bindValue(':code',$code);
+        $statement->bindValue(':date',$date);
+        $statement->bindValue(':departureTime',$departureTime);
+		$statement->bindValue(':arrivalTime',$arrivalTime);
+        $statement->bindValue(':availableSeats',$availableSeats);
+        $statement->bindValue(':price',$price);
+        $statement->execute();
+
+        $statement = null;
+        $getConnection = null;
+    }
+	
+	# confirm a flight
+    public function confirmFlight($bookingID)
+    {
+        $connection = $this->getConnection();
+
+        # call confirmFlight procedure
+        $sql = "CALL pr_confirmFlight (:bookingID)";
+        $statement = $connection->prepare($sql);
+        $statement->bindValue(':bookingID',$bookingID);
+        $statement->execute();
+
+        $statement = null;
+        $getConnection = null;
+    }
+
+    #cancel a booking for a flight
+    public function cancelBooking($bookingID){
+
+        $connection = $this->getConnection();
+
+        $sql = "CALL pr_cancelBooking(:bookingID)";
+        $statement = $connection->prepare($sql);
+        $statement->bindValue(':bookingID',$bookingID);
+        $statement->execute();
+
+        $statement = null;
+        $getConnection = null;
+    }
+	
+	public function vw_flightPlanCodes()
+    {
+        $connection = $this->getConnection();
+        $sql = "SELECT * FROM vw_flightPlanCodes";
+        $statement = $connection->query($sql);
+        $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $statement = null;
+        $connection = null;
+
+        $airports = array();
+
+        foreach ($rowSet as $currentFlightPlan){
+            $flightPlanCodes[] = $currentFlightPlan['FlightPlanCode'] ;
+        }
+
+        return $flightPlanCodes;
+    }
+	
+	public function vw_flightPlans()
+    {
+        $connection = $this->getConnection();
+        $sql = "SELECT * FROM vw_flightPlans";
+        $statement = $connection->query($sql);
+        $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $statement = null;
+        $connection = null;
+
+        return $rowSet;
     }
 }
