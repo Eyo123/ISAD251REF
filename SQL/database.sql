@@ -51,6 +51,14 @@ CREATE TABLE Booking
 	CONSTRAINT pk_Booking PRIMARY KEY (BookingID)
 );
 
+CREATE TABLE AuditLog
+(
+	AuditLogID INT AUTO_INCREMENT NOT NULL,
+	AuditLogTimeStamp DATETIME default current_timestamp NOT NULL,
+	AuditLogRecord VARCHAR(255) NOT NULL,
+	CONSTRAINT pk_AuditLog PRIMARY KEY (AuditLogID)
+);
+
 -- view all available flights
 CREATE VIEW vw_availableFlights AS
 SELECT FlightPlanOrigin,FlightPlanDestination,JourneyDate,JourneyDepartureTime,JourneyArrivalTime,JourneyAvailableSeats,FlightPlanCode,JourneyID,JourneyPrice,DATE_FORMAT(JourneyDate, '%d/%m/%Y') AS JourneyDateFormatted
@@ -78,6 +86,11 @@ FROM FlightPlan
 CREATE VIEW vw_flightPlans AS
 SELECT FlightPlanOrigin,FlightPlanDestination,FlightPlanCode
 FROM FlightPlan
+
+-- view audit log records
+CREATE VIEW vw_auditLogRecords AS
+SELECT AuditLogID,AuditLogTimeStamp,AuditLogRecord
+FROM AuditLog
 
 -- book a journey, returns bookingID, if no seats left returns bookingID = 0
 DELIMITER //
@@ -246,6 +259,19 @@ BEGIN
 	SELECT FlightPlanID INTO v_flightPlanID FROM FlightPlan WHERE FlightPlanCode = p_code;
 	INSERT INTO Journey(JourneyDate,JourneyDepartureTime,JourneyArrivalTime,JourneyAvailableSeats,JourneyPrice,FlightPlanID)
 	VALUES(p_date,p_departureTime,p_arrivalTime,p_availableSeats,p_price,v_flightPlanID);
+END;
+
+//
+
+DELIMITER ;
+
+-- add an entry to the audit log
+DELIMITER //
+
+CREATE PROCEDURE pr_addAuditLogRecord(p_record VARCHAR(255))
+BEGIN
+	INSERT INTO AuditLog(AuditLogRecord)
+	VALUES (p_record);
 END;
 
 //
