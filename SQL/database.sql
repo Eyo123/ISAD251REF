@@ -277,3 +277,17 @@ END;
 //
 
 DELIMITER ;
+
+-- procedure for deleting a customer
+DELIMITER //
+
+CREATE PROCEDURE pr_deleteCustomer(p_customerID INT)
+BEGIN
+	UPDATE Customer
+	SET CustomerFirstName = 'deleted', CustomerLastName = 'deleted', CustomerEmail = 'deleted', CustomerPassword = 'deleted', CustomerAddress1 = 'deleted', CustomerAddress2 = 'deleted', CustomerPostcode = 'deleted'
+	WHERE CustomerID = p_customerID;
+END;
+
+//
+
+DELIMITER ;

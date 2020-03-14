@@ -409,4 +409,22 @@ class Database
 
         return $rowSet;
 	}
+	
+	public function deleteCustomer($customerId)
+    {
+        $connection = $this->getConnection();
+
+        # call items flight search procedure
+        $sql = "CALL pr_deleteCustomer (:customerID)";
+        $statement = $connection->prepare($sql);
+        $statement->bindValue(':customerID',$customerId);
+        $statement->execute();
+		
+		$statement = null;
+        $connection = null;
+		
+		# record in audit log
+		$record = "Procedure:deleteCustomer CustomerID:$customerId";
+		$this->addAuditLogRecord($record);
+    }
 }
