@@ -32,7 +32,18 @@ class Database
 		return $dbConnection;
 	}
 
-	
+	# add a record to the audit log
+	private function addAuditLogRecord($record)
+	{
+		$connection = $this->getConnection();
+		$sql = "CALL pr_addAuditLogRecord (:record)";
+        $statement = $connection->prepare($sql);
+        $statement->bindValue(':record',$record);
+        $statement->execute();
+		
+		$statement = null;
+        $connection = null;
+	}
 
     # book a flight and get resulting bookingID, if no seats = 0
     public function bookFlight($customerId, $journeyId)
@@ -54,6 +65,10 @@ class Database
 
         $statement = null;
         $connection = null;
+		
+		# record in audit log
+		$record = "Procedure:bookFlight CustomerID:$customerId JourneyID:$journeyId";
+		$this->addAuditLogRecord($record);
 
         return $bookingID;
     }
@@ -80,9 +95,13 @@ class Database
 		$customerFirstName = $row[2];
 		$customerLastName = $row[3];
 		$customerName = $customerFirstName . " " . $customerLastName;
-
-        $statement = null;
+		
+		$statement = null;
         $getConnection = null;
+		
+		# record in audit log
+		$record = "Procedure:customerLogin Email:$email CustomerID:$customerId";
+		$this->addAuditLogRecord($record);
 
         return array($hashedPassword,$customerId,$customerName);
     }
@@ -110,9 +129,13 @@ class Database
         $statement = $connection->query($sql);
         $row = $statement->fetch(PDO::FETCH_NUM);
         $results = $row[0];
-
-        $statement = null;
+		
+		$statement = null;
         $getConnection = null;
+		
+		# record in audit log
+		$record = "Procedure:registerCustomer Email:$email Result:$results";
+		$this->addAuditLogRecord($record);
 
         return $results;
     }
@@ -130,9 +153,13 @@ class Database
         $statement->execute();
 
         $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-        $statement = null;
+		
+		$statement = null;
         $connection = null;
+		
+		# record in audit log
+		$record = "Procedure:searchFlights Origin:$origin Destination:$destination Date:$date";
+		$this->addAuditLogRecord($record);
 
         return $rowSet;
     }
@@ -148,9 +175,13 @@ class Database
         $statement->execute();
 
         $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-        $statement = null;
+		
+		$statement = null;
         $connection = null;
+		
+		# record in audit log
+		$record = "Procedure:bookings CustomerID:$customerId";
+		$this->addAuditLogRecord($record);
 
         return $rowSet;
     }
@@ -166,9 +197,13 @@ class Database
         $statement->execute();
 
         $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-        $statement = null;
+		
+		$statement = null;
         $connection = null;
+		
+		# record in audit log
+		$record = "Procedure:confirmedBookings CustomerID:$customerId";
+		$this->addAuditLogRecord($record);
 
         return $rowSet;
     }
@@ -179,9 +214,13 @@ class Database
         $sql = "SELECT * FROM vw_availableFlights";
         $statement = $connection->query($sql);
         $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-        $statement = null;
+		
+		$statement = null;
         $connection = null;
+		
+		# record in audit log
+		$record = "Procedure:vw_availableFlights";
+		$this->addAuditLogRecord($record);
 
         return $rowSet;
     }
@@ -193,14 +232,18 @@ class Database
         $statement = $connection->query($sql);
         $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        $statement = null;
-        $connection = null;
-
         $airports = array();
 
         foreach ($rowSet as $currentAirport){
             $airports[] = $currentAirport['FlightPlanOrigin'] ;
         }
+
+		$statement = null;
+        $connection = null;
+
+		# record in audit log
+		$record = "Procedure:vw_originAirports";
+		$this->addAuditLogRecord($record);
 
         return $airports;
     }
@@ -212,14 +255,18 @@ class Database
         $statement = $connection->query($sql);
         $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        $statement = null;
-        $connection = null;
-
         $airports = array();
 
         foreach ($rowSet as $currentAirport){
             $airports[] = $currentAirport['FlightPlanDestination'] ;
         }
+
+		$statement = null;
+        $connection = null;
+
+		# record in audit log
+		$record = "Procedure:vw_destinationAirports";
+		$this->addAuditLogRecord($record);
 
         return $airports;
     }
@@ -237,8 +284,12 @@ class Database
         $statement->bindValue(':flightPlanDestination',$flightPlanDestination);
         $statement->execute();
 
-        $statement = null;
+		$statement = null;
         $getConnection = null;
+
+		# record in audit log
+		$record = "Procedure:addFlightPlan FlightPlanCode:$flightPlanCode FlightPlanOrigin:$flightPlanOrigin FlightPlanDestination:$flightPlanDestination";
+		$this->addAuditLogRecord($record); 
     }
 	
 	# add a new journey
@@ -256,9 +307,13 @@ class Database
         $statement->bindValue(':availableSeats',$availableSeats);
         $statement->bindValue(':price',$price);
         $statement->execute();
-
-        $statement = null;
+		
+		$statement = null;
         $getConnection = null;
+		
+		# record in audit log
+		$record = "Procedure:addJourney Code:$code Date:$date DepartureTime:$departureTime ArrivalTime:$arrivalTime AvailableSeats:$availableSeats Price:$price";
+		$this->addAuditLogRecord($record);  
     }
 	
 	# confirm a flight
@@ -271,9 +326,13 @@ class Database
         $statement = $connection->prepare($sql);
         $statement->bindValue(':bookingID',$bookingID);
         $statement->execute();
-
-        $statement = null;
+		
+		$statement = null;
         $getConnection = null;
+		
+		# record in audit log
+		$record = "Procedure:confirmFlight BookingID:$bookingID";
+		$this->addAuditLogRecord($record);   
     }
 
     #cancel a booking for a flight
@@ -286,8 +345,12 @@ class Database
         $statement->bindValue(':bookingID',$bookingID);
         $statement->execute();
 
-        $statement = null;
+		$statement = null;
         $getConnection = null;
+		
+		# record in audit log
+		$record = "Procedure:cancelBooking BookingID:$bookingID";
+		$this->addAuditLogRecord($record);  
     }
 	
 	public function vw_flightPlanCodes()
@@ -296,15 +359,19 @@ class Database
         $sql = "SELECT * FROM vw_flightPlanCodes";
         $statement = $connection->query($sql);
         $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-        $statement = null;
-        $connection = null;
-
+		
         $airports = array();
 
         foreach ($rowSet as $currentFlightPlan){
             $flightPlanCodes[] = $currentFlightPlan['FlightPlanCode'] ;
         }
+
+		$statement = null;
+        $connection = null;
+		
+		# record in audit log
+		$record = "Procedure:vw_flightPlanCodes";
+		$this->addAuditLogRecord($record);
 
         return $flightPlanCodes;
     }
@@ -315,10 +382,49 @@ class Database
         $sql = "SELECT * FROM vw_flightPlans";
         $statement = $connection->query($sql);
         $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-        $statement = null;
+		
+		$statement = null;
         $connection = null;
+		
+		# record in audit log
+		$record = "Procedure:vw_flightPlans";
+		$this->addAuditLogRecord($record);
 
         return $rowSet;
+    }
+	
+	public function vw_auditLogRecords()
+	{
+		$connection = $this->getConnection();
+        $sql = "SELECT * FROM vw_auditLogRecords";
+        $statement = $connection->query($sql);
+        $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
+		
+		$statement = null;
+        $connection = null;
+		
+		# record in audit log
+		$record = "Procedure:vw_flightPlans";
+		$this->addAuditLogRecord($record);
+
+        return $rowSet;
+	}
+	
+	public function deleteCustomer($customerId)
+    {
+        $connection = $this->getConnection();
+
+        # call items flight search procedure
+        $sql = "CALL pr_deleteCustomer (:customerID)";
+        $statement = $connection->prepare($sql);
+        $statement->bindValue(':customerID',$customerId);
+        $statement->execute();
+		
+		$statement = null;
+        $connection = null;
+		
+		# record in audit log
+		$record = "Procedure:deleteCustomer CustomerID:$customerId";
+		$this->addAuditLogRecord($record);
     }
 }
