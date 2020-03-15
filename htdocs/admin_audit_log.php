@@ -16,7 +16,7 @@ include_once('includes/admin_header.html');
         <p>Records</p>
         <?php
         $database = new Database();
-        # retrieve products which are for sale
+        
         $rowSet = $database->vw_auditLogRecords();
 
         if($rowSet)

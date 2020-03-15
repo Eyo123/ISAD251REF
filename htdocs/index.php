@@ -20,7 +20,7 @@ include_once('includes/header.html');
         <p>Flights</p>
         <?php
         $database = new Database();
-        # retrieve products which are for sale
+        
         $rowSet = $database->vw_availableFlights();
 
         if($rowSet)

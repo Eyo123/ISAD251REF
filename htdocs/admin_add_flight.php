@@ -112,7 +112,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
         <h3 class="text-info">Current Flight Plans</h3>
         <?php
         $database = new Database();
-        # retrieve products which are for sale
+        
         $rowSet = $database->vw_flightPlans();
 
         if($rowSet)
