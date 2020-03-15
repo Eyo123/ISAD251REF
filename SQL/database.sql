@@ -118,6 +118,16 @@ CREATE VIEW vw_auditLogRecords AS
 SELECT AuditLogID,AuditLogTimeStamp,AuditLogRecord
 FROM AuditLog
 
+-- view airports
+CREATE VIEW vw_airports AS
+SELECT AirportCode, AirportName, AirportCountry, AirportLatitude, AirportLongitude
+FROM Airport
+
+-- view airport codes
+CREATE VIEW vw_airportCodes AS
+SELECT AirportCode
+FROM Airport
+
 -- book a journey, returns bookingID, if no seats left returns bookingID = 0
 DELIMITER //
 
@@ -317,3 +327,17 @@ END;
 //
 
 DELIMITER ;
+
+-- add an airport
+DELIMITER //
+
+CREATE PROCEDURE pr_addAirport(p_code VARCHAR(40),p_name VARCHAR(40), p_country VARCHAR(25),p_lat FLOAT,p_long FLOAT)
+BEGIN
+	INSERT INTO Airport(AirportCode,AirportName,AirportCountry,AirportLatitude,AirportLongitude)
+	VALUES(p_code,p_name,p_country,p_lat,p_long);
+END;
+
+//
+
+DELIMITER ;
+

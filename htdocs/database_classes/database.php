@@ -376,6 +376,27 @@ class Database
         return $flightPlanCodes;
     }
 	
+	public function vw_airportCodes()
+    {
+        $connection = $this->getConnection();
+        $sql = "SELECT * FROM vw_airportCodes";
+        $statement = $connection->query($sql);
+        $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($rowSet as $currentAirport){
+            $airportCodes[] = $currentAirport['AirportCode'] ;
+        }
+
+		$statement = null;
+        $connection = null;
+		
+		# record in audit log
+		$record = "Procedure:vw_airportCodes";
+		$this->addAuditLogRecord($record);
+
+        return $airportCodes;
+    }
+	
 	public function vw_flightPlans()
     {
         $connection = $this->getConnection();
@@ -409,6 +430,46 @@ class Database
 
         return $rowSet;
 	}
+	
+	public function vw_airports()
+	{
+		$connection = $this->getConnection();
+        $sql = "SELECT * FROM vw_airports";
+        $statement = $connection->query($sql);
+        $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
+		
+		$statement = null;
+        $connection = null;
+		
+		# record in audit log
+		$record = "Procedure:vw_airports";
+		$this->addAuditLogRecord($record);
+
+        return $rowSet;
+	}
+	
+	# add a new airport
+    public function addAirport($code,$name,$country,$lat,$long)
+    {
+        $connection = $this->getConnection();
+
+        # call addAirport procedure
+        $sql = "CALL pr_addAirport (:code,:name,:country,:lat,:long)";
+        $statement = $connection->prepare($sql);
+        $statement->bindValue(':code',$code);
+        $statement->bindValue(':name',$name);
+        $statement->bindValue(':country',$country);
+		$statement->bindValue(':lat',$lat);
+        $statement->bindValue(':long',$long);
+        $statement->execute();
+		
+		$statement = null;
+        $getConnection = null;
+		
+		# record in audit log
+		$record = "Procedure:addAirport Code:$code Name:$name Country:$country Latitude:$lat Longitude:$long";
+		$this->addAuditLogRecord($record);
+    }
 	
 	public function deleteCustomer($customerId)
     {
