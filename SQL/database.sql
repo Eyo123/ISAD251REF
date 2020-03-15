@@ -11,6 +11,27 @@ CREATE TABLE Customer
 	CONSTRAINT pk_Customer PRIMARY KEY (CustomerId)
 );
 
+CREATE TABLE Airport
+(
+	AirportCode VARCHAR(40) UNIQUE NOT NULL,
+	AirportName VARCHAR(40) NOT NULL,	
+	AirportCountry VARCHAR(25) NOT NULL,
+	AirportLatitude FLOAT NOT NULL,
+	AirportLongitude FLOAT NOT NULL,
+	CONSTRAINT pk_Airport PRIMARY KEY (AirportCode)
+);
+
+INSERT INTO Airport (AirportCode, AirportName, AirportCountry, AirportLatitude, AirportLongitude)
+VALUES
+('New York (JFK)', 'John F. Kennedy International', 'United States of America', 40.6413, -73.7781),
+('London (LDN)', 'London Heathrow', 'England', 51.47, -0.4543),
+('Cairo (CWE)', 'Cairo West', 'Egypt', 30.1164, 30.9154),
+('Frankfurt (FRA)', 'Frankfurt Airport', 'Germany', 50.0333, 8.57056),
+('Paris (CDG)', 'Paris Charles de Gaulle Airport', 'France', 49.0097, 2.5477),
+('Alicante (ALC)', 'Alicante Airport', 'Spain', 38.2868, -0.5572),
+('Rome (FCO)', 'Leonardo da Vinci International Airport', 'Italy', 41.7999, 12.2462),
+('Zurich (ZRH)', 'Zurich Airport', 'Swizerland', 47.4647, 8.5492);
+
 CREATE TABLE FlightPlan
 (
 	FlightPlanID INT AUTO_INCREMENT UNIQUE NOT NULL,
@@ -20,8 +41,13 @@ CREATE TABLE FlightPlan
 	CONSTRAINT pk_FlightPlan PRIMARY KEY (FlightPlanID)
 );
 
+-- delete bookings, journeys and flightplans first before changing table
+ALTER TABLE FlightPlan
+ADD CONSTRAINT fk_FlightPlan_FlightPlanOrigin FOREIGN KEY (FlightPlanOrigin) REFERENCES Airport(AirportCode),
+ADD CONSTRAINT fk_FlightPlan_FlightPlanDestination FOREIGN KEY (FlightPlanDestination) REFERENCES Airport(AirportCode);
+
 INSERT INTO FlightPlan(FlightPlanCode,FlightPlanOrigin,FlightPlanDestination)
-VALUES('LN123','London','New York'),('ES456','Egypt','Switzerland');
+VALUES('LN123','London (LDN)','New York (JFK)'),('ES456','Cairo (CWE)','Zurich (ZRH)');
 
 CREATE TABLE Journey
 (
