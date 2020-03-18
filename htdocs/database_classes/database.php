@@ -488,4 +488,23 @@ class Database
 		$record = "Procedure:deleteCustomer CustomerID:$customerId";
 		$this->addAuditLogRecord($record);
     }
+	
+	public function addFeedback($name,$record)
+    {
+        $connection = $this->getConnection();
+
+        # call addFeedback procedure
+        $sql = "CALL pr_addFeedback (:name,:record)";
+        $statement = $connection->prepare($sql);
+        $statement->bindValue(':name',$name);
+		$statement->bindValue(':record',$record);
+        $statement->execute();
+		
+		$statement = null;
+        $connection = null;
+		
+		# record in audit log
+		$record = "Procedure:addFeedback Name:$name";
+		$this->addAuditLogRecord($record);
+    }
 }

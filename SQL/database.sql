@@ -85,6 +85,15 @@ CREATE TABLE AuditLog
 	CONSTRAINT pk_AuditLog PRIMARY KEY (AuditLogID)
 );
 
+CREATE TABLE HCIFeedback
+(
+	HCIFeedbackID INT AUTO_INCREMENT UNIQUE NOT NULL,
+	HCIFeedbackTimeStamp DATETIME default current_timestamp NOT NULL,
+	HCIFeedbackName VARCHAR(50),
+	HCIFeedbackRecord VARCHAR(10000) NOT NULL,
+	CONSTRAINT pk_HCIFeedback PRIMARY KEY (HCIFeedbackID)
+)
+
 -- view all available flights
 CREATE VIEW vw_availableFlights AS
 SELECT FlightPlanOrigin,FlightPlanDestination,JourneyDate,JourneyDepartureTime,JourneyArrivalTime,JourneyAvailableSeats,FlightPlanCode,JourneyID,JourneyPrice,DATE_FORMAT(JourneyDate, '%d/%m/%Y') AS JourneyDateFormatted
@@ -341,3 +350,15 @@ END;
 
 DELIMITER ;
 
+-- add feedback
+DELIMITER //
+
+CREATE PROCEDURE pr_addFeedback(p_name VARCHAR(50), p_record VARCHAR(10000))
+BEGIN
+	INSERT INTO HCIFeedback (HCIFeedbackName,HCIFeedbackRecord)
+	VALUES(p_name,p_record);
+END;
+
+//
+
+DELIMITER ;
