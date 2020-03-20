@@ -48,7 +48,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
         <h2 class="bg-dark text-white">Feedback Page</h2>
     </div>
 	<div class="row">
-	Please randomly select one of the three following HCI assessment documents, when completed send to: flightcrew2020@protonmail.com
+	Please randomly select one of the three following HCI assessment documents, when completed send to: <a href="mailto:flightcrew2020@protonmail.com">flightcrew2020@protonmail.com</a>
 	</div>
 	<div class="row">
 	<a href="documents/HCI_1.pdf">HCI assessment document 1</a>
