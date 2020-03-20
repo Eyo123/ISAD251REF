@@ -51,13 +51,13 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 	Please randomly select one of the three following HCI assessment documents, when completed send to: <a href="mailto:flightcrew2020@protonmail.com">flightcrew2020@protonmail.com</a>
 	</div>
 	<div class="row">
-	<a href="documents/HCI_1.pdf">HCI assessment document 1</a>
+	<a href="documents/HCI_1.docx">HCI assessment document 1</a>
 	</div>
 	<div class="row">
-	<a href="documents/HCI_2.pdf">HCI assessment document 2</a>
+	<a href="documents/HCI_2.docx">HCI assessment document 2</a>
 	</div>
 	<div class="row">
-	<a href="documents/HCI_3.pdf">HCI assessment document 3</a>
+	<a href="documents/HCI_3.docx">HCI assessment document 3</a>
 	</div>
     <div class="row">
         <form action="feedback.php" method="post" id="feedback">
