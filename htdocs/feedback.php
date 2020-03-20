@@ -48,12 +48,21 @@ if($_SERVER['REQUEST_METHOD']=='POST')
         <h2 class="bg-dark text-white">Feedback Page</h2>
     </div>
 	<div class="row">
-	Please see the -<a href="documents/HCI.pdf"> HCI Document </a>- for feedback questions
+	Please randomly select one of the three following HCI assessment documents, when completed send to: flightcrew2020@protonmail.com
+	</div>
+	<div class="row">
+	<a href="documents/HCI_1.pdf">HCI assessment document 1</a>
+	</div>
+	<div class="row">
+	<a href="documents/HCI_2.pdf">HCI assessment document 2</a>
+	</div>
+	<div class="row">
+	<a href="documents/HCI_3.pdf">HCI assessment document 3</a>
 	</div>
     <div class="row">
         <form action="feedback.php" method="post" id="feedback">
             <div class="form-group">
-                <label for="record">Feedback:</label>
+                <label for="record">Any Further Feedback:</label>
                 <textarea rows="10" name="record" maxlength="10000" class="form-control" id="record" required></textarea>
             </div>
 			<div class="form-group">
