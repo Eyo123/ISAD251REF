@@ -11,11 +11,15 @@ if (!isset($_SESSION['customerId']))
 {
     load();
 }
-
+print '<td><a href="delete.php?id=" class="btn btn-info">Delete your account</a></td></tr></tbody>';
 ?>
+
+
 <?php
 
-//  this function delete data in the sql
+
+
+
 
 if (isset($_GET['id']))
 {
@@ -24,18 +28,11 @@ if (isset($_GET['id']))
     $database->deleteCustomer($customerId);
 
     echo '<div class="container"><div class="row">';
-    echo '<h3 class="text-info">your account has been deleted</h3></div></div>';
+
+    echo '<h3 class="text-info">your account has been deleted</h3>';
+
 
 }
-else
-{
-    echo '<h3 class="text-info">No </h3>';
-
-}
-
-
-
-
 
 
 ?>
@@ -43,6 +40,6 @@ else
 
 <?php
 
-include_once('includes/footer.html');
+
 
 ?>
