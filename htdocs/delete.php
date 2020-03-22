@@ -29,7 +29,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 	
 	if(empty($errors))
 	{
-		$customerID = $_SESSION['customerId'];
+		$customerId = $_SESSION['customerId'];
 		$database = new Database();
 		$database->deleteCustomer($customerId);
 
