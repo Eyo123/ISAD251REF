@@ -5,6 +5,7 @@ $page_title = "delete";
 include_once('includes/header.html');
 require_once('database_classes/database.php');
 require_once('login_tools.php');
+require_once ('secure_input.php');
 
 # redirect to login page if not logged in
 if (!isset($_SESSION['customerId']))
@@ -49,6 +50,10 @@ if($_SERVER['REQUEST_METHOD']=='POST')
                 <label for="confirm">Please enter the word DELETE to confirm account deletion:</label>
                 <input type="text" name="confirm" class="form-control" id="confirm" size="50"
                        value="<?php if (isset($_POST['confirm'])) echo $_POST['confirm']; ?>" required>
+            </div>
+			<div class="form-group">
+                <p><input type="submit" value="Delete Account">
+                    <input type="reset" value="Clear"></p>
             </div>
         </form>
     </div>
