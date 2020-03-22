@@ -17,12 +17,6 @@ print '<td><a href="delete.php?id=" class="btn btn-info">Delete your account</a>
 
 <?php
 
-
-
-
-
-if (isset($_GET['id']))
-{
     $customerID = $_SESSION['customerId'];
     $database = new Database();
     $database->deleteCustomer($customerId);
@@ -30,10 +24,6 @@ if (isset($_GET['id']))
     echo '<div class="container"><div class="row">';
 
     echo '<h3 class="text-info">your account has been deleted</h3>';
-
-
-}
-
 
 ?>
 
