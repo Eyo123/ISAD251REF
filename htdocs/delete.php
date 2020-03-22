@@ -17,29 +17,26 @@ if (!isset($_SESSION['customerId']))
 
 //  this function delete data in the sql
 
-if(isset($_POST['delete']))
+if (isset($_GET['id']))
 {
-    try {
-        $pdoConnect = new PDO("mysql:host=localhost;dbname=test_db","root","");
-    } catch (PDOException $exc) {
-        echo $exc->getMessage();
-        exit();
-    }
+    $customerID = $_GET['id'];
+    $database = new Database();
+    $database->deleteCustomer($customerId);
 
-
-
-    // SQL to delete the query
-    $id = $_POST['id'];
-
-    $pdoQuery = "DELETE FROM `users` WHERE `column name` = :column name";
-
-    $pdoResult = $pdoConnect->prepare($pdoQuery);
-
-    $pdoExec = $pdoResult->execute(array(":column"=>$column));
-
-
+    echo '<div class="container"><div class="row">';
+    echo '<h3 class="text-info">your account has been deleted</h3></div></div>';
 
 }
+else
+{
+    echo '<h3 class="text-info">No </h3>';
+
+}
+
+
+
+
+
 
 ?>
 
