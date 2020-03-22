@@ -35,6 +35,16 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 
 		load();
 	}
+	else 
+	{
+		echo '<div class="container"><div class="row">';
+		echo '<p class="text-info">The following error(s) occurred:<br>' ;
+		foreach ($errors as $msg)
+		{
+			echo " - $msg<br>";
+		}
+		echo 'Please try again.</p></div></div>';
+	} 
 }
 
 ?>
