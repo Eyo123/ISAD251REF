@@ -23,7 +23,7 @@ print '<td><a href="delete.php?id=" class="btn btn-info">Delete your account</a>
 
 if (isset($_GET['id']))
 {
-    $customerID = $_GET['id'];
+    $customerID = $_SESSION['customerId'];
     $database = new Database();
     $database->deleteCustomer($customerId);
 
