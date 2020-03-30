@@ -11,6 +11,27 @@ CREATE TABLE Customer
 	CONSTRAINT pk_Customer PRIMARY KEY (CustomerId)
 );
 
+CREATE TABLE Airport
+(
+	AirportCode VARCHAR(40) UNIQUE NOT NULL,
+	AirportName VARCHAR(40) NOT NULL,	
+	AirportCountry VARCHAR(25) NOT NULL,
+	AirportLatitude FLOAT NOT NULL,
+	AirportLongitude FLOAT NOT NULL,
+	CONSTRAINT pk_Airport PRIMARY KEY (AirportCode)
+);
+
+INSERT INTO Airport (AirportCode, AirportName, AirportCountry, AirportLatitude, AirportLongitude)
+VALUES
+('New York (JFK)', 'John F. Kennedy International', 'United States of America', 40.6413, -73.7781),
+('London (LDN)', 'London Heathrow', 'England', 51.47, -0.4543),
+('Cairo (CWE)', 'Cairo West', 'Egypt', 30.1164, 30.9154),
+('Frankfurt (FRA)', 'Frankfurt Airport', 'Germany', 50.0333, 8.57056),
+('Paris (CDG)', 'Paris Charles de Gaulle Airport', 'France', 49.0097, 2.5477),
+('Alicante (ALC)', 'Alicante Airport', 'Spain', 38.2868, -0.5572),
+('Rome (FCO)', 'Leonardo da Vinci International Airport', 'Italy', 41.7999, 12.2462),
+('Zurich (ZRH)', 'Zurich Airport', 'Swizerland', 47.4647, 8.5492);
+
 CREATE TABLE FlightPlan
 (
 	FlightPlanID INT AUTO_INCREMENT UNIQUE NOT NULL,
@@ -20,8 +41,13 @@ CREATE TABLE FlightPlan
 	CONSTRAINT pk_FlightPlan PRIMARY KEY (FlightPlanID)
 );
 
+-- delete bookings, journeys and flightplans first before changing table
+ALTER TABLE FlightPlan
+ADD CONSTRAINT fk_FlightPlan_FlightPlanOrigin FOREIGN KEY (FlightPlanOrigin) REFERENCES Airport(AirportCode),
+ADD CONSTRAINT fk_FlightPlan_FlightPlanDestination FOREIGN KEY (FlightPlanDestination) REFERENCES Airport(AirportCode);
+
 INSERT INTO FlightPlan(FlightPlanCode,FlightPlanOrigin,FlightPlanDestination)
-VALUES('LN123','London','New York'),('ES456','Egypt','Switzerland');
+VALUES('LN123','London (LDN)','New York (JFK)'),('ES456','Cairo (CWE)','Zurich (ZRH)');
 
 CREATE TABLE Journey
 (
@@ -51,6 +77,23 @@ CREATE TABLE Booking
 	CONSTRAINT pk_Booking PRIMARY KEY (BookingID)
 );
 
+CREATE TABLE AuditLog
+(
+	AuditLogID INT AUTO_INCREMENT NOT NULL,
+	AuditLogTimeStamp DATETIME default current_timestamp NOT NULL,
+	AuditLogRecord VARCHAR(255) NOT NULL,
+	CONSTRAINT pk_AuditLog PRIMARY KEY (AuditLogID)
+);
+
+CREATE TABLE HCIFeedback
+(
+	HCIFeedbackID INT AUTO_INCREMENT UNIQUE NOT NULL,
+	HCIFeedbackTimeStamp DATETIME default current_timestamp NOT NULL,
+	HCIFeedbackName VARCHAR(50),
+	HCIFeedbackRecord VARCHAR(10000) NOT NULL,
+	CONSTRAINT pk_HCIFeedback PRIMARY KEY (HCIFeedbackID)
+)
+
 -- view all available flights
 CREATE VIEW vw_availableFlights AS
 SELECT FlightPlanOrigin,FlightPlanDestination,JourneyDate,JourneyDepartureTime,JourneyArrivalTime,JourneyAvailableSeats,FlightPlanCode,JourneyID,JourneyPrice,DATE_FORMAT(JourneyDate, '%d/%m/%Y') AS JourneyDateFormatted
@@ -78,6 +121,21 @@ FROM FlightPlan
 CREATE VIEW vw_flightPlans AS
 SELECT FlightPlanOrigin,FlightPlanDestination,FlightPlanCode
 FROM FlightPlan
+
+-- view audit log records
+CREATE VIEW vw_auditLogRecords AS
+SELECT AuditLogID,AuditLogTimeStamp,AuditLogRecord
+FROM AuditLog
+
+-- view airports
+CREATE VIEW vw_airports AS
+SELECT AirportCode, AirportName, AirportCountry, AirportLatitude, AirportLongitude
+FROM Airport
+
+-- view airport codes
+CREATE VIEW vw_airportCodes AS
+SELECT AirportCode
+FROM Airport
 
 -- book a journey, returns bookingID, if no seats left returns bookingID = 0
 DELIMITER //
@@ -246,6 +304,59 @@ BEGIN
 	SELECT FlightPlanID INTO v_flightPlanID FROM FlightPlan WHERE FlightPlanCode = p_code;
 	INSERT INTO Journey(JourneyDate,JourneyDepartureTime,JourneyArrivalTime,JourneyAvailableSeats,JourneyPrice,FlightPlanID)
 	VALUES(p_date,p_departureTime,p_arrivalTime,p_availableSeats,p_price,v_flightPlanID);
+END;
+
+//
+
+DELIMITER ;
+
+-- add an entry to the audit log
+DELIMITER //
+
+CREATE PROCEDURE pr_addAuditLogRecord(p_record VARCHAR(255))
+BEGIN
+	INSERT INTO AuditLog(AuditLogRecord)
+	VALUES (p_record);
+END;
+
+//
+
+DELIMITER ;
+
+-- procedure for deleting a customer
+DELIMITER //
+
+CREATE PROCEDURE pr_deleteCustomer(p_customerID INT)
+BEGIN
+	UPDATE Customer
+	SET CustomerFirstName = 'deleted', CustomerLastName = 'deleted', CustomerPassword = 'deleted', CustomerAddress1 = 'deleted', CustomerAddress2 = 'deleted', CustomerPostcode = 'deleted'
+	WHERE CustomerID = p_customerID;
+END;
+
+//
+
+DELIMITER ;
+
+-- add an airport
+DELIMITER //
+
+CREATE PROCEDURE pr_addAirport(p_code VARCHAR(40),p_name VARCHAR(40), p_country VARCHAR(25),p_lat FLOAT,p_long FLOAT)
+BEGIN
+	INSERT INTO Airport(AirportCode,AirportName,AirportCountry,AirportLatitude,AirportLongitude)
+	VALUES(p_code,p_name,p_country,p_lat,p_long);
+END;
+
+//
+
+DELIMITER ;
+
+-- add feedback
+DELIMITER //
+
+CREATE PROCEDURE pr_addFeedback(p_name VARCHAR(50), p_record VARCHAR(10000))
+BEGIN
+	INSERT INTO HCIFeedback (HCIFeedbackName,HCIFeedbackRecord)
+	VALUES(p_name,p_record);
 END;
 
 //

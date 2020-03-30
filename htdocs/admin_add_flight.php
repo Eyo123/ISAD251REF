@@ -13,6 +13,9 @@ if (!isset($_SESSION['admin']))
 	load();
 }
 
+$database = new Database();
+$airportCodes = $database->vw_airportCodes();
+
 # if registration form submitted need to check it
 if($_SERVER['REQUEST_METHOD']=='POST')
 { 
@@ -72,15 +75,27 @@ if($_SERVER['REQUEST_METHOD']=='POST')
     </div>
     <div class="row">
         <form action="admin_add_flight.php" method="post" id="addFlightPlan">
-            <div class="form-group">
+			<div class="form-group">
                 <label for="origin">Origin:</label>
-                <input type="text" name="origin" class="form-control" pattern="[A-Za-z]" id="origin" size="50"
-                       value="<?php if (isset($_POST['origin'])) echo $_POST['origin']; ?>" required>
+				<select name="origin" class="form-control" id="origin" width="50"
+                value="<?php if (isset($_POST['origin'])) echo $_POST['origin']; ?>" required>
+                        <?php
+                            foreach ($airportCodes as $airportCode){
+                                echo '<option value="'.$airportCode.'">'.$airportCode.'</option>';
+                            }
+                        ?>
+                </select>
             </div>
 			<div class="form-group">
                 <label for="destination">Destination:</label>
-                <input type="text" name="destination" class="form-control" pattern="[A-Za-z]" id="destination" size="50"
-                       value="<?php if (isset($_POST['destination'])) echo $_POST['destination']; ?>" required>
+				<select name="destination" class="form-control" id="destination" width="50"
+                value="<?php if (isset($_POST['destination'])) echo $_POST['destination']; ?>" required>
+                        <?php
+                            foreach ($airportCodes as $airportCode){
+                                echo '<option value="'.$airportCode.'">'.$airportCode.'</option>';
+                            }
+                        ?>
+                </select>
             </div>
 			<div class="form-group">
                 <label for="code">Flight Plan Code:</label>
@@ -97,7 +112,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
         <h3 class="text-info">Current Flight Plans</h3>
         <?php
         $database = new Database();
-        # retrieve products which are for sale
+        
         $rowSet = $database->vw_flightPlans();
 
         if($rowSet)

@@ -1,5 +1,9 @@
 <?php
 
+ini_set('display_errors',1);
+ini_set('display_startup_errors',1);
+error_reporting(E_ALL);
+
 $page_title = "Flightcrew Home";
 
 require_once('database_classes/database.php');
@@ -20,7 +24,7 @@ include_once('includes/header.html');
         <p>Flights</p>
         <?php
         $database = new Database();
-        # retrieve products which are for sale
+        
         $rowSet = $database->vw_availableFlights();
 
         if($rowSet)

@@ -54,5 +54,5 @@ function validate($email='',$pwd='')
 	
   }
   # if errors, return false and errors
-  return array(false,$errors); 
+  return array(false,$errors,false); 
 }
