@@ -469,7 +469,24 @@ class Database
 
         return $rowSet;
 	}
-	
+    
+    public function getLatLong ($code)
+    {
+        $connection = $this->getConnection();
+
+        $sql = "CALL pr_getLatLong (:AirportCode,)'";
+        $statement = $connection->prepare($sql);
+        $statement->bindValue(':AirportCode',$code);
+        $statement->execute();
+
+        $statement = null;
+        $getConnection = null;
+		
+		# record in audit log
+		$record = "Procedure:getLatLong AirportCode:$code";
+		$this->addAuditLogRecord($record);
+    }
+
 	# add a new airport
     public function addAirport($code,$name,$country,$lat,$long)
     {
