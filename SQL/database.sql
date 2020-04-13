@@ -366,10 +366,23 @@ DELIMITER ;
 
 -- add flight plan distance
 DELIMITER //
+
 CREATE PROCEDURE pr_addFlightPlanPlusDistance (p_flightPlanCode VARCHAR(10), p_flightPlanOrigin VARCHAR(20), p_flightPlanDestination VARCHAR(20), p_flightPlanDistance INT)
 BEGIN
 	INSERT INTO FlightPlan(FlightPlanCode,FlightPlanOrigin,FlightPlanDestination,FlightPlanDistance)
 	VALUES (p_flightPlanCode,p_flightPlanOrigin,p_flightPlanDestination, p_flightPlanDistance);
+END;
+
+//
+
+DELIMITER ;
+
+-- get latitude and longitude from an airport code
+DELIMITER //
+
+CREATE PROCEDURE pr_getLatLong (p_AirportCode VARCHAR(20))
+BEGIN
+	SELECT AirportLatitude, AirportLongitude FROM vw_airports WHERE AirportCode = p_AirportCode;
 END;
 
 //
