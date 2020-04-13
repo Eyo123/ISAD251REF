@@ -298,7 +298,7 @@ class Database
             $connection = $this->getConnection();
     
             # call addFlightPlan procedure
-            $sql = "CALL pr_addFlightPlanPlusDistance (:flightPlanCode,:flightPlanOrigin,:flightPlanDestination, :flightPlanDistance)";
+            $sql = "CALL pr_addFlightPlanPlusDistance (:flightPlanCode,:flightPlanOrigin,:flightPlanDestination,:flightPlanDistance)";
             $statement = $connection->prepare($sql);
             $statement->bindValue(':flightPlanCode',$flightPlanCode);
             $statement->bindValue(':flightPlanOrigin',$flightPlanOrigin);

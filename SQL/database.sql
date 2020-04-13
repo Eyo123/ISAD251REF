@@ -38,6 +38,7 @@ CREATE TABLE FlightPlan
 	FlightPlanCode VARCHAR(10) UNIQUE NOT NULL,
 	FlightPlanOrigin VARCHAR(20) NOT NULL,
 	FlightPlanDestination VARCHAR(20) NOT NULL,
+	FlightPlanDistance INT,
 	CONSTRAINT pk_FlightPlan PRIMARY KEY (FlightPlanID)
 );
 
@@ -357,6 +358,18 @@ CREATE PROCEDURE pr_addFeedback(p_name VARCHAR(50), p_record VARCHAR(10000))
 BEGIN
 	INSERT INTO HCIFeedback (HCIFeedbackName,HCIFeedbackRecord)
 	VALUES(p_name,p_record);
+END;
+
+//
+
+DELIMITER ;
+
+-- add flight plan distance
+DELIMITER //
+CREATE PROCEDURE pr_addFlightPlanPlusDistance (p_flightPlanCode VARCHAR(10), p_flightPlanOrigin VARCHAR(20), p_flightPlanDestination VARCHAR(20), p_flightPlanDistance INT)
+BEGIN
+	INSERT INTO FlightPlan(FlightPlanCode,FlightPlanOrigin,FlightPlanDestination,FlightPlanDistance)
+	VALUES (p_flightPlanCode,p_flightPlanOrigin,p_flightPlanDestination, p_flightPlanDistance);
 END;
 
 //
