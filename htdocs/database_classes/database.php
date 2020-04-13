@@ -303,7 +303,7 @@ class Database
             $statement->bindValue(':flightPlanCode',$flightPlanCode);
             $statement->bindValue(':flightPlanOrigin',$flightPlanOrigin);
             $statement->bindValue(':flightPlanDestination',$flightPlanDestination);
-            $statement->bindValue(':flightPlanDestination',$flightPlanDistance);
+            $statement->bindValue(':flightPlanDistance',$flightPlanDistance);
             $statement->execute();
     
             $statement = null;
