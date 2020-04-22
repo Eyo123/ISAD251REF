@@ -73,7 +73,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
   if (empty($errors)) 
   {
 	echo '<div class="container"><div class="row">';
-    echo '<h3 class="test-info">You are now registered</h3><h4><a href="login.php">Login</a></h4></div></div>';
+    echo '<h3 class="test-info">You have successfully registered!</h3></div> <div class="row"><h3><a class="btn-info" href="login.php">Login</a></h3></div>';
     include_once('includes/footer.html');
     exit();
   }
@@ -139,10 +139,10 @@ if($_SERVER['REQUEST_METHOD']=='POST')
             </div>
             <div class="form-check">
                 <input type="checkbox" class="form-check-input" name="termsAndConditions" id="acceptTermsAndConditions">
-                <label class="form-check-label" for="acceptTermsAndConditions">I agree to the <a href="terms_and_conditions.php" class="btn btn-info">terms and conditions</a></label>
+                <label class="form-check-label" for="acceptTermsAndConditions">I agree to the <a href="terms_and_conditions.php">terms and conditions</a></label>
             </div>
             <div class="form-group">
-                <p><input type="submit" value="Register">
+                <br><p><input type="submit" class="btn-info" value="Register">
                     <input type="reset" value="Clear"></p>
             </div>
             <p id="check_password_result"></p>
