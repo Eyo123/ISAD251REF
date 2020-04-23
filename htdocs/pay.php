@@ -17,7 +17,7 @@ if (!isset($_SESSION['customerId']))
 <section role="contentinfo" aria-label="Flightcrew booking">
     <div class="container">
         <div class="row">
-            <h2 class="bg-dark text-white">complete your payment</h2>
+            <h2 class="bg-dark text-white">Please complete your payment</h2>
         </div>
         <div class="row">
             <?php
@@ -29,11 +29,11 @@ if (!isset($_SESSION['customerId']))
                 $database = new Database();
                 $database->confirmFlight($bookingID);
 
-                echo '<h3 class="text-info">you have confirmed your booking</h3>';
+                echo '<h3 class="text-info">Booking confirmed!</h3>';
             }
             else
             {
-                echo '<h3 class="text-info">No flight booked</h3>';
+                echo '<h3 class="text-info">No flights booked</h3>';
             }
             ?>
         </div>
