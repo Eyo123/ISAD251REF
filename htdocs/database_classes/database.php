@@ -276,7 +276,18 @@ class Database
     {
         $connection = $this->getConnection();
 
-        # call addFlightPlan procedure
+        # call lat long for origin and destination
+		
+		# call haversign to get distance
+		
+		# call addFlightPlan procedure
+		
+		# add :flightPlanDistance
+		
+		# alter pr_addFlightPlan in SQL
+		
+		# admin add flight php file updated to include destination
+		
         $sql = "CALL pr_addFlightPlan (:flightPlanCode,:flightPlanOrigin,:flightPlanDestination)";
         $statement = $connection->prepare($sql);
         $statement->bindValue(':flightPlanCode',$flightPlanCode);
