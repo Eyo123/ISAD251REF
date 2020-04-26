@@ -481,20 +481,20 @@ class Database
         return $rowSet;
 	}
     
-    public function getLatLong ($code)
+    public function getLatLong ($AirportCode)
     {
         $connection = $this->getConnection();
 
-        $sql = "CALL pr_getLatLong (:AirportCode,)'";
+        $sql = "CALL pr_getLatLong (:AirportCode)";
         $statement = $connection->prepare($sql);
-        $statement->bindValue(':AirportCode',$code);
+        $statement->bindValue(':AirportCode',$AirportCode);
         $statement->execute();
 
         $statement = null;
         $getConnection = null;
 		
 		# record in audit log
-		$record = "Procedure:getLatLong AirportCode:$code";
+		$record = "Procedure:getLatLong AirportCode:$AirportCode";
 		$this->addAuditLogRecord($record);
     }
 
