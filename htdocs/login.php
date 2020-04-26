@@ -35,7 +35,7 @@ if (isset($errors) && !empty($errors))
             <p><input type="submit" value="Login">
                 <input type="reset" value="Clear"></p>
         </div>
-            <p><a href="register.php" class="btn btn-info">Create Account</a></p>
+            <br><p><a href="register.php" class="btn btn-info btn-sm">Create Account</a></p>
         </form>
     </div>
 </div>

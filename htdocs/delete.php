@@ -33,7 +33,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 		$database = new Database();
 		$database->deleteCustomer($customerId);
 
-		load();
+		load('logout.php');
 	}
 	else 
 	{
