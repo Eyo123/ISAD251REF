@@ -490,12 +490,18 @@ class Database
         $statement->bindValue(':AirportCode',$AirportCode);
         $statement->execute();
 
+        $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
+
         $statement = null;
         $getConnection = null;
-		
+        
+        
+
 		# record in audit log
 		$record = "Procedure:getLatLong AirportCode:$AirportCode";
-		$this->addAuditLogRecord($record);
+        $this->addAuditLogRecord($record);
+        
+        return $rowSet[0];
     }
 
 	# add a new airport
