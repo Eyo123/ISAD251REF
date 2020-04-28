@@ -306,28 +306,6 @@ class Database
 
 
     }
-
-    	# add a new flight plan
-        public function addFlightPlanPlusDistance($flightPlanCode,$flightPlanOrigin,$flightPlanDestination,$flightPlanDistance)
-        {
-            $connection = $this->getConnection();
-    
-            # call addFlightPlan procedure
-            $sql = "CALL pr_addFlightPlanPlusDistance (:flightPlanCode,:flightPlanOrigin,:flightPlanDestination,:flightPlanDistance)";
-            $statement = $connection->prepare($sql);
-            $statement->bindValue(':flightPlanCode',$flightPlanCode);
-            $statement->bindValue(':flightPlanOrigin',$flightPlanOrigin);
-            $statement->bindValue(':flightPlanDestination',$flightPlanDestination);
-            $statement->bindValue(':flightPlanDistance',$flightPlanDistance);
-            $statement->execute();
-    
-            $statement = null;
-            $getConnection = null;
-    
-            # record in audit log
-            $record = "Procedure:addFlightPlan FlightPlanCode:$flightPlanCode FlightPlanOrigin:$flightPlanOrigin FlightPlanDestination:$flightPlanDestination FlightPlanDistance:$flightPlanDistance";
-            $this->addAuditLogRecord($record); 
-        }
 	
 	# add a new journey
     public function addJourney($code,$date,$departureTime,$arrivalTime,$availableSeats,$price)
