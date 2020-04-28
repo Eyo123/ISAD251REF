@@ -120,7 +120,7 @@ FROM FlightPlan
 
 -- view all flight plans
 CREATE VIEW vw_flightPlans AS
-SELECT FlightPlanOrigin,FlightPlanDestination,FlightPlanCode
+SELECT FlightPlanOrigin,FlightPlanDestination,FlightPlanCode,FlightPlanDistance
 FROM FlightPlan
 
 -- view audit log records
