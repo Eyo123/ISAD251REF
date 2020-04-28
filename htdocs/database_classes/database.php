@@ -1,5 +1,7 @@
 <?php
 
+require_once('database_classes/navigation.php');
+
 class Database
 {
 	public $DB_SERVER;
@@ -278,15 +280,20 @@ class Database
 
         $navigation = new Navigation();
 
-        #$originLatLong = getLatLong($flightPlanOrigin);
+        $originLatLong = $this->getLatLong($flightPlanOrigin);
 
-        #$destinationLatLong = getLatLong($flightPlanDestination);
+        $destinationLatLong = $this->getLatLong($flightPlanDestination);
 
-        $sql = "CALL pr_addFlightPlan (:flightPlanCode,:flightPlanOrigin,:flightPlanDestination)";
+        $navigation = new Navigation();
+
+        $flightPlanDistance = $navigation->haversineDistance($originLatLong["AirportLatitude"], $originLatLong["AirportLongitude"], $destinationLatLong["AirportLatitude"], $destinationLatLong["AirportLongitude"] );
+
+        $sql = "CALL pr_addFlightPlanPlusDistance (:flightPlanCode,:flightPlanOrigin,:flightPlanDestination,:flightPlanDistance)";
         $statement = $connection->prepare($sql);
         $statement->bindValue(':flightPlanCode',$flightPlanCode);
         $statement->bindValue(':flightPlanOrigin',$flightPlanOrigin);
         $statement->bindValue(':flightPlanDestination',$flightPlanDestination);
+        $statement->bindValue(':flightPlanDistance',$flightPlanDistance);
         $statement->execute();
 
 		$statement = null;
@@ -296,37 +303,8 @@ class Database
 		$record = "Procedure:addFlightPlan FlightPlanCode:$flightPlanCode FlightPlanOrigin:$flightPlanOrigin FlightPlanDestination:$flightPlanDestination";
 		$this->addAuditLogRecord($record); 
 
-/* 
-        $connection = $this->getConnection();
 
-        # call lat long for origin and destination
-        $originLatLong = getLatLong($flightPlanOrigin);
-        
-        $destinationLatLong = getLatLong($flightPlanDestination);
-		# call haversign to get distance
-        $navigation = new Navigation();
 
-        $flightPlanDistance = $navigation->haversineDistance($originLatLong["AirportLatitude"], $originLatLong["AirportLongitude"], $destinationLatLong["AirportLatitude"], $destinationLatLong["AirportLongitude"] );
-        
-		# call addFlightPlan procedure
-
-		# add :flightPlanDistance
-		
-		# alter pr_addFlightPlan in SQL
-		
-		# admin add flight php file updated to include destination
-		
-        $sql = "CALL pr_addFlightPlanPlusDistance (:flightPlanCode,:flightPlanOrigin,:flightPlanDestination,:flightPlanDistance)";
-        $statement = $connection->prepare($sql);
-        $statement->bindValue(':flightPlanCode',$flightPlanCode);
-        $statement->bindValue(':flightPlanOrigin',$flightPlanOrigin);
-        $statement->bindValue(':flightPlanDestination',$flightPlanDestination);
-        $statement->bindValue(':flightPlanDistance',$flightPlanDistance);
-        $statement->execute();
-
-		# record in audit log
-		$record = "Procedure:addFlightPlan FlightPlanCode:$flightPlanCode FlightPlanOrigin:$flightPlanOrigin FlightPlanDestination:$flightPlanDestination";
-		$this->addAuditLogRecord($record);  */
     }
 
     	# add a new flight plan
