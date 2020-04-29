@@ -28,11 +28,11 @@
                 {
                     # state who you are logged in as
                     echo "<p>You are logged in as {$_SESSION['customerName']}
-                        <a href=\"logout.php\" class=\"btn-light btn-lg\">Logout</a></p>";
+                        <a href=\"logout.php\" class=\"btn btn-light btn-sm\" onclick=\"return confirm('Are you sure you want to logout?');\">Logout</a></p>";
                 }
                 else
                 {
-                    echo "<p><a href=\"login.php\" class=\"btn btn-info\">customer login</a> | <a href=\"admin_login.php\" class=\"btn btn-info\">administrator login</a></p>";
+                    echo "<p><a href=\"login.php\" class=\"btn btn-light btn-sm\">customer login</a> | <a href=\"admin_login.php\" class=\"btn btn-light btn-sm\">administrator login</a></p>";
                 }
               ?>
           </div>
@@ -53,8 +53,11 @@
                           <a class="nav-link active" href="encrypt_message.php">Contact</a>
                       </li>
 					  <li class="nav-item">
-                          <a class="nav-link active" href="delete.php">Settings</a>
-			          </li>
+                          <a class="nav-link active" href="feedback.php">Feedback</a>
+                      </li>
+			      <li class="nav-item">
+                          <a class="nav-link active" href="delete.php">Account</a>
+			                </li>
                   </ul>
                   <br>
               </div>
