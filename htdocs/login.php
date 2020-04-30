@@ -32,7 +32,7 @@ if (isset($errors) && !empty($errors))
             <input type="password" class="form-control" name="pass" id="pass" required>
         </div>
         <div class="form-group">
-            <p><input type="submit" value="Login">
+            <p><input type="submit" class="btn-info" value="Login">
                 <input type="reset" value="Clear"></p>
         </div>
             <br><p><a href="register.php" class="btn btn-info btn-sm">Create Account</a></p>

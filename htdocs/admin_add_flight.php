@@ -103,7 +103,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
                        value="<?php if (isset($_POST['code'])) echo $_POST['code']; ?>" required>
             </div>
             <div class="form-group">
-                <p><input type="submit" value="Add">
+                <p><input type="submit" class="btn-info" value="Add">
                     <input type="reset" value="Clear"></p>
             </div>
         </form>

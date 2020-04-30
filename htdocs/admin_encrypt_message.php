@@ -82,7 +82,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 				<label><input type="radio" name="action" value="decrypt">Decrypt</label>
             </div>
             <div class="form-group">
-                <p><input type="submit" value="Calculate">
+                <p><input type="submit" class="btn-info" value="Calculate">
                     <input type="reset" value="Clear"></p>
             </div>
         </form>

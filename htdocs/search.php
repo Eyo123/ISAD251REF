@@ -52,7 +52,7 @@ $destinationAirports = $database-> vw_AirportCodes();
                        value="<?php if (isset($_POST['date'])) echo $_POST['date']; ?>" required>
             </div>
             <div class="form-group">
-                <p><input type="submit" value="Search">
+                <p><input type="submit" class="btn-info" value="Search">
                     <input type="reset" value="Clear"></p>
             </div>
         </form>
