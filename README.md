@@ -1,4 +1,4 @@
-# PRCO204 Coursework - Flight Application
+# PRCO204 Coursework - Flight Application - Group X
 
 ## Product vision
 As a team, we have designed an airline booking system. The system consists of a desktop and mobile compatible website which is connected to a single web API, connected to a MySQL database. 
