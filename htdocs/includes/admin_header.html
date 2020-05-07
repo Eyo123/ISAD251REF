@@ -28,11 +28,11 @@
                 {
                     # state who you are logged in as
                     echo "<p>You are logged in as an administrator
-                        <a href=\"admin_logout.php\" class=\"btn btn-info\">logout</a></p>";
+                        <a href=\"admin_logout.php\"  class=\"btn btn-light\" onclick=\"return confirm('Are you sure you want to logout?');\">Logout</a></p>";
                 }
                 else
                 {
-                    echo "<p><a href=\"login.php\" class=\"btn btn-info\">customer login</a> | <a href=\"admin_login.php\" class=\"btn btn-info\">administrator login</a></p>";
+                    echo "<p><a href=\"login.php\" class=\"btn btn-light btn-sm\">customer login</a> | <a href=\"admin_login.php\" class=\"btn btn-light btn-sm\">administrator login</a></p>";
                 }
               ?>
           </div>
@@ -54,9 +54,6 @@
                       </li>
                       <li class="nav-item">
                           <a class="nav-link active" href="admin_encrypt_message.php">Contact</a>
-                      </li>
-					  <li class="nav-item">
-                          <a class="nav-link active" href="admin_statistics.php">View Statistics</a>
                       </li>
 					  <li class="nav-item">
                           <a class="nav-link active" href="admin_audit_log.php">View Audit Log</a>

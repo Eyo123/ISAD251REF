@@ -33,7 +33,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 		$database = new Database();
 		$database->deleteCustomer($customerId);
 
-		load();
+		load('logout.php');
 	}
 	else 
 	{
@@ -62,7 +62,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
                        value="<?php if (isset($_POST['confirm'])) echo $_POST['confirm']; ?>" required>
             </div>
 			<div class="form-group">
-                <p><input type="submit" value="Delete Account">
+                <p><input type="submit" class="btn-info" value="Delete Account">
                     <input type="reset" value="Clear"></p>
             </div>
         </form>

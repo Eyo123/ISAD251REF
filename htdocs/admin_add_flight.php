@@ -103,7 +103,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
                        value="<?php if (isset($_POST['code'])) echo $_POST['code']; ?>" required>
             </div>
             <div class="form-group">
-                <p><input type="submit" value="Add">
+                <p><input type="submit" class="btn-info" value="Add">
                     <input type="reset" value="Clear"></p>
             </div>
         </form>
@@ -120,16 +120,19 @@ if($_SERVER['REQUEST_METHOD']=='POST')
             print "<table class=\"table table-bordered\">";
             print "<thead><tr><th scope='col'>Flight Plan Origin</th>";
             print "<th scope='col'>Flight Plan Destination</th>";
-            print "<th scope='col'>Flight Plan Code</th></tr></thead>";
+            print "<th scope='col'>Flight Plan Code</th>";
+            print "<th scope='col'>Flight Plan Distance</th></tr></thead>";
 
             foreach ($rowSet as $row)
             {
                 print "<tbody><tr><td>".$row['FlightPlanOrigin']."</td>";
                 print "<td>".$row['FlightPlanDestination']."</td>";
-                print "<td>".$row['FlightPlanCode']."</td></tr></tbody>";
+                print "<td>".$row['FlightPlanCode']."</td>";
+                print "<td>".$row['FlightPlanDistance']."</td></tr></tbody>";
             }
             print "</table>";
         }
+
 
         ?>
     </div>

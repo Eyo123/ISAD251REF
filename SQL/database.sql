@@ -38,6 +38,7 @@ CREATE TABLE FlightPlan
 	FlightPlanCode VARCHAR(10) UNIQUE NOT NULL,
 	FlightPlanOrigin VARCHAR(20) NOT NULL,
 	FlightPlanDestination VARCHAR(20) NOT NULL,
+	FlightPlanDistance INT,
 	CONSTRAINT pk_FlightPlan PRIMARY KEY (FlightPlanID)
 );
 
@@ -119,7 +120,7 @@ FROM FlightPlan
 
 -- view all flight plans
 CREATE VIEW vw_flightPlans AS
-SELECT FlightPlanOrigin,FlightPlanDestination,FlightPlanCode
+SELECT FlightPlanOrigin,FlightPlanDestination,FlightPlanCode,FlightPlanDistance
 FROM FlightPlan
 
 -- view audit log records
@@ -269,7 +270,7 @@ DELIMITER //
 
 CREATE PROCEDURE pr_bookings(p_customerID INT)
 BEGIN
-	SELECT FlightPlanCode, FlightPlanOrigin, FlightPlanDestination, JourneyDepartureTime, JourneyArrivalTime, JourneyDate, BookingID,DATE_FORMAT(JourneyDate, '%d/%m/%Y') AS JourneyDateFormatted
+	SELECT FlightPlanCode, FlightPlanOrigin, FlightPlanDestination, JourneyDepartureTime, JourneyArrivalTime, JourneyDate, BookingID, DATE_FORMAT(JourneyDate, '%d/%m/%Y') AS JourneyDateFormatted
 	FROM FlightPlan, Journey, Booking
 	WHERE FlightPlan.FlightPlanID = Journey.FlightPlanID
 	AND Journey.JourneyID = Booking.JourneyID
@@ -357,6 +358,31 @@ CREATE PROCEDURE pr_addFeedback(p_name VARCHAR(50), p_record VARCHAR(10000))
 BEGIN
 	INSERT INTO HCIFeedback (HCIFeedbackName,HCIFeedbackRecord)
 	VALUES(p_name,p_record);
+END;
+
+//
+
+DELIMITER ;
+
+-- add flight plan distance
+DELIMITER //
+
+CREATE PROCEDURE pr_addFlightPlanPlusDistance (p_flightPlanCode VARCHAR(10), p_flightPlanOrigin VARCHAR(20), p_flightPlanDestination VARCHAR(20), p_flightPlanDistance INT)
+BEGIN
+	INSERT INTO FlightPlan(FlightPlanCode,FlightPlanOrigin,FlightPlanDestination,FlightPlanDistance)
+	VALUES(p_flightPlanCode,p_flightPlanOrigin,p_flightPlanDestination, p_flightPlanDistance);
+END;
+
+//
+
+DELIMITER ;
+
+-- get latitude and longitude from an airport code
+DELIMITER //
+
+CREATE PROCEDURE pr_getLatLong (p_AirportCode VARCHAR(20))
+BEGIN
+	SELECT AirportLatitude, AirportLongitude FROM vw_airports WHERE AirportCode = p_AirportCode;
 END;
 
 //

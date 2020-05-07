@@ -1,5 +1,7 @@
 <?php
 
+require_once('database_classes/navigation.php');
+
 class Database
 {
 	public $DB_SERVER;
@@ -276,12 +278,22 @@ class Database
     {
         $connection = $this->getConnection();
 
-        # call addFlightPlan procedure
-        $sql = "CALL pr_addFlightPlan (:flightPlanCode,:flightPlanOrigin,:flightPlanDestination)";
+        $navigation = new Navigation();
+
+        $originLatLong = $this->getLatLong($flightPlanOrigin);
+
+        $destinationLatLong = $this->getLatLong($flightPlanDestination);
+
+        $navigation = new Navigation();
+
+        $flightPlanDistance = $navigation->haversineDistance($originLatLong["AirportLatitude"], $originLatLong["AirportLongitude"], $destinationLatLong["AirportLatitude"], $destinationLatLong["AirportLongitude"] );
+
+        $sql = "CALL pr_addFlightPlanPlusDistance (:flightPlanCode,:flightPlanOrigin,:flightPlanDestination,:flightPlanDistance)";
         $statement = $connection->prepare($sql);
         $statement->bindValue(':flightPlanCode',$flightPlanCode);
         $statement->bindValue(':flightPlanOrigin',$flightPlanOrigin);
         $statement->bindValue(':flightPlanDestination',$flightPlanDestination);
+        $statement->bindValue(':flightPlanDistance',$flightPlanDistance);
         $statement->execute();
 
 		$statement = null;
@@ -290,6 +302,9 @@ class Database
 		# record in audit log
 		$record = "Procedure:addFlightPlan FlightPlanCode:$flightPlanCode FlightPlanOrigin:$flightPlanOrigin FlightPlanDestination:$flightPlanDestination";
 		$this->addAuditLogRecord($record); 
+
+
+
     }
 	
 	# add a new journey
@@ -447,7 +462,30 @@ class Database
 
         return $rowSet;
 	}
-	
+    
+    public function getLatLong ($AirportCode)
+    {
+        $connection = $this->getConnection();
+
+        $sql = "CALL pr_getLatLong (:AirportCode)";
+        $statement = $connection->prepare($sql);
+        $statement->bindValue(':AirportCode',$AirportCode);
+        $statement->execute();
+
+        $rowSet = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $statement = null;
+        $getConnection = null;
+        
+        
+
+		# record in audit log
+		$record = "Procedure:getLatLong AirportCode:$AirportCode";
+        $this->addAuditLogRecord($record);
+        
+        return $rowSet[0];
+    }
+
 	# add a new airport
     public function addAirport($code,$name,$country,$lat,$long)
     {
